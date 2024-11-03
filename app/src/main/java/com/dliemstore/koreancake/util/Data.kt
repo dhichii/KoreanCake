@@ -7,7 +7,7 @@ data class CakeData(
     val price: String,
     val downPayment: String,
     val remainingPayment: String,
-    val process: String,
+    val status: String,
     val pickupTime: PickupTime,
     val picture: Int,
     val telp: String,
@@ -64,7 +64,7 @@ val cakeList = listOf(
         price = "Rp 300.000",
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.000",
-        process = "Proses",
+        status = "Proses",
         pickupTime = PickupTime(
             date = "Senin, 20 Januari 2024",
             time = "Jam 10"
@@ -83,7 +83,7 @@ val cakeList = listOf(
         price = "Rp 300.000",
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.001",
-        process = "Proses",
+        status = "Proses",
         pickupTime = PickupTime(
             date = "Senin, 20 Januari 2024",
             time = "Jam 10"
@@ -102,7 +102,7 @@ val cakeList = listOf(
         price = "Rp 300.000",
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.002",
-        process = "Proses",
+        status = "Proses",
         pickupTime = PickupTime(
             date = "Senin, 20 Januari 2024",
             time = "Jam 10"
@@ -121,7 +121,7 @@ val cakeList = listOf(
         price = "Rp 300.000",
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.003",
-        process = "Proses",
+        status = "Proses",
         pickupTime = PickupTime(
             date = "Senin, 20 Januari 2024",
             time = "Jam 10"
@@ -140,7 +140,7 @@ val cakeList = listOf(
         price = "Rp 300.000",
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.004",
-        process = "Proses",
+        status = "Proses",
         pickupTime = PickupTime(
             date = "Senin, 20 Januari 2024",
             time = "Jam 10"
@@ -159,7 +159,7 @@ val cakeList = listOf(
         price = "Rp 300.000",
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.005",
-        process = "Proses",
+        status = "Proses",
         pickupTime = PickupTime(
             date = "Senin, 20 Januari 2024",
             time = "Jam 10"
@@ -178,7 +178,7 @@ val cakeList = listOf(
         price = "Rp 300.000",
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.006",
-        process = "Proses",
+        status = "Proses",
         pickupTime = PickupTime(
             date = "Senin, 20 Januari 2024",
             time = "Jam 10"
@@ -197,7 +197,7 @@ val cakeList = listOf(
         price = "Rp 300.000",
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.007",
-        process = "Proses",
+        status = "Proses",
         pickupTime = PickupTime(
             date = "Senin, 20 Januari 2024",
             time = "Jam 10"
@@ -216,7 +216,7 @@ val cakeList = listOf(
         price = "Rp 300.000",
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.008",
-        process = "Selesai",
+        status = "Selesai",
         pickupTime = PickupTime(
             date = "Senin, 20 Januari 2024",
             time = "Jam 10"
@@ -235,7 +235,7 @@ val cakeList = listOf(
         price = "Rp 300.000",
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.009",
-        process = "Selesai",
+        status = "Selesai",
         pickupTime = PickupTime(
             date = "Senin, 20 Januari 2024",
             time = "Jam 10"
@@ -251,12 +251,12 @@ val cakeList = listOf(
     )
 )
 
-fun getAllCakeData(process: String): List<CakeData> {
-    if (process == "All") {
+fun getAllCakeData(status: String): List<CakeData> {
+    if (status == "All") {
         return cakeList
     }
 
-    return cakeList.filter { value -> value.process == process }
+    return cakeList.filter { value -> value.status == status }
 }
 
 fun getCakeData(id: String): CakeData {
