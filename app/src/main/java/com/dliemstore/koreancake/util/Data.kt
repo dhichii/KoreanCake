@@ -11,10 +11,10 @@ data class CakeData(
     val pickupTime: PickupTime,
     val picture: Int,
     val telp: String,
-    val color: String,
-    val size: String,
-    val layer: Int,
+    val size: Int,
+    val layer: Int? = null,
     val text: String,
+    val notes: String? = null,
     val textColor: String,
     val progress: List<Progress>
 )
@@ -70,10 +70,10 @@ val cakeList = listOf(
             time = "Jam 10"
         ),
         picture = R.drawable.ic_launcher_background,
-        telp = "084348434398",
-        color = "Merah",
-        size = "16",
-        layer = 1,
+        telp = "6284348434398",
+        notes = "Merah",
+        size = 16,
+        layer = 2,
         text = "HBD",
         textColor = "Putih",
         progress = progressList
@@ -89,10 +89,10 @@ val cakeList = listOf(
             time = "Jam 10"
         ),
         picture = R.drawable.ic_launcher_background,
-        telp = "084348434398",
-        color = "Merah",
-        size = "16",
-        layer = 1,
+        telp = "6284348434398",
+        notes = "Merah",
+        size = 16,
+        layer = 3,
         text = "HBD",
         textColor = "Putih",
         progress = progressList
@@ -108,10 +108,9 @@ val cakeList = listOf(
             time = "Jam 10"
         ),
         picture = R.drawable.ic_launcher_background,
-        telp = "084348434398",
-        color = "Merah",
-        size = "16",
-        layer = 1,
+        telp = "6284348434398",
+        notes = "Merah",
+        size = 16,
         text = "HBD",
         textColor = "Putih",
         progress = progressList
@@ -127,10 +126,9 @@ val cakeList = listOf(
             time = "Jam 10"
         ),
         picture = R.drawable.ic_launcher_background,
-        telp = "084348434398",
-        color = "Merah",
-        size = "16",
-        layer = 1,
+        telp = "6284348434398",
+        notes = "Merah",
+        size = 16,
         text = "HBD",
         textColor = "Putih",
         progress = progressList
@@ -146,10 +144,10 @@ val cakeList = listOf(
             time = "Jam 10"
         ),
         picture = R.drawable.ic_launcher_background,
-        telp = "084348434398",
-        color = "Merah",
-        size = "16",
-        layer = 1,
+        telp = "6284348434398",
+        notes = "Merah",
+        size = 16,
+        layer = 2,
         text = "HBD",
         textColor = "Putih",
         progress = progressList
@@ -165,10 +163,9 @@ val cakeList = listOf(
             time = "Jam 10"
         ),
         picture = R.drawable.ic_launcher_background,
-        telp = "084348434398",
-        color = "Merah",
-        size = "16",
-        layer = 1,
+        telp = "6284348434398",
+        notes = "Merah",
+        size = 16,
         text = "HBD",
         textColor = "Putih",
         progress = progressList
@@ -184,10 +181,9 @@ val cakeList = listOf(
             time = "Jam 10"
         ),
         picture = R.drawable.ic_launcher_background,
-        telp = "084348434398",
-        color = "Merah",
-        size = "16",
-        layer = 1,
+        telp = "6284348434398",
+        notes = "Merah",
+        size = 16,
         text = "HBD",
         textColor = "Putih",
         progress = progressList
@@ -203,10 +199,8 @@ val cakeList = listOf(
             time = "Jam 10"
         ),
         picture = R.drawable.ic_launcher_background,
-        telp = "084348434398",
-        color = "Merah",
-        size = "16",
-        layer = 1,
+        telp = "6284348434398",
+        size = 16,
         text = "HBD",
         textColor = "Putih",
         progress = progressList
@@ -222,10 +216,9 @@ val cakeList = listOf(
             time = "Jam 10"
         ),
         picture = R.drawable.ic_launcher_background,
-        telp = "084348434398",
-        color = "Merah",
-        size = "16",
-        layer = 1,
+        telp = "6284348434398",
+        notes = "Merah",
+        size = 16,
         text = "HBD",
         textColor = "Putih",
         progress = progressList
@@ -241,10 +234,9 @@ val cakeList = listOf(
             time = "Jam 10"
         ),
         picture = R.drawable.ic_launcher_background,
-        telp = "084348434398",
-        color = "Merah",
-        size = "16",
-        layer = 1,
+        telp = "6284348434398",
+        size = 16,
+        layer = 2,
         text = "HBD",
         textColor = "Putih",
         progress = progressList
