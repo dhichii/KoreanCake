@@ -1,4 +1,4 @@
-package com.dliemstore.koreancake.cake
+package com.dliemstore.koreancake.ui.screens.cake
 
 import StatusTag
 import androidx.compose.foundation.Image
