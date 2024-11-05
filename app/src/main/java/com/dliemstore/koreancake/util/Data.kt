@@ -8,7 +8,7 @@ data class CakeData(
     val downPayment: String,
     val remainingPayment: String,
     val status: String,
-    val pickupTime: PickupTime,
+    val pickupTime: Long,
     val picture: Int,
     val telp: String,
     val size: Int,
@@ -17,11 +17,6 @@ data class CakeData(
     val notes: String? = null,
     val textColor: String,
     val progress: List<Progress>
-)
-
-data class PickupTime(
-    val date: String,
-    val time: String
 )
 
 data class Progress(
@@ -65,10 +60,7 @@ val cakeList = listOf(
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.000",
         status = "Proses",
-        pickupTime = PickupTime(
-            date = "Senin, 20 Januari 2024",
-            time = "Jam 10"
-        ),
+        pickupTime = 1730952000000,
         picture = R.drawable.ic_launcher_background,
         telp = "6284348434398",
         notes = "Merah",
@@ -84,10 +76,7 @@ val cakeList = listOf(
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.001",
         status = "Proses",
-        pickupTime = PickupTime(
-            date = "Senin, 20 Januari 2024",
-            time = "Jam 10"
-        ),
+        pickupTime = 1730952000000,
         picture = R.drawable.ic_launcher_background,
         telp = "6284348434398",
         notes = "Merah",
@@ -103,10 +92,7 @@ val cakeList = listOf(
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.002",
         status = "Proses",
-        pickupTime = PickupTime(
-            date = "Senin, 20 Januari 2024",
-            time = "Jam 10"
-        ),
+        pickupTime = 1730952000000,
         picture = R.drawable.ic_launcher_background,
         telp = "6284348434398",
         notes = "Merah",
@@ -121,10 +107,7 @@ val cakeList = listOf(
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.003",
         status = "Proses",
-        pickupTime = PickupTime(
-            date = "Senin, 20 Januari 2024",
-            time = "Jam 10"
-        ),
+        pickupTime = 1730952000000,
         picture = R.drawable.ic_launcher_background,
         telp = "6284348434398",
         notes = "Merah",
@@ -139,10 +122,7 @@ val cakeList = listOf(
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.004",
         status = "Proses",
-        pickupTime = PickupTime(
-            date = "Senin, 20 Januari 2024",
-            time = "Jam 10"
-        ),
+        pickupTime = 1730566800000,
         picture = R.drawable.ic_launcher_background,
         telp = "6284348434398",
         notes = "Merah",
@@ -158,10 +138,7 @@ val cakeList = listOf(
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.005",
         status = "Proses",
-        pickupTime = PickupTime(
-            date = "Senin, 20 Januari 2024",
-            time = "Jam 10"
-        ),
+        pickupTime = 1730952000000,
         picture = R.drawable.ic_launcher_background,
         telp = "6284348434398",
         notes = "Merah",
@@ -176,10 +153,7 @@ val cakeList = listOf(
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.006",
         status = "Proses",
-        pickupTime = PickupTime(
-            date = "Senin, 20 Januari 2024",
-            time = "Jam 10"
-        ),
+        pickupTime = 1730952000000,
         picture = R.drawable.ic_launcher_background,
         telp = "6284348434398",
         notes = "Merah",
@@ -194,10 +168,7 @@ val cakeList = listOf(
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.007",
         status = "Proses",
-        pickupTime = PickupTime(
-            date = "Senin, 20 Januari 2024",
-            time = "Jam 10"
-        ),
+        pickupTime = 1730952000000,
         picture = R.drawable.ic_launcher_background,
         telp = "6284348434398",
         size = 16,
@@ -211,10 +182,7 @@ val cakeList = listOf(
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.008",
         status = "Selesai",
-        pickupTime = PickupTime(
-            date = "Senin, 20 Januari 2024",
-            time = "Jam 10"
-        ),
+        pickupTime = 1730566800000,
         picture = R.drawable.ic_launcher_background,
         telp = "6284348434398",
         notes = "Merah",
@@ -229,10 +197,7 @@ val cakeList = listOf(
         downPayment = "Rp 100.000",
         remainingPayment = "Rp 200.009",
         status = "Selesai",
-        pickupTime = PickupTime(
-            date = "Senin, 20 Januari 2024",
-            time = "Jam 10"
-        ),
+        pickupTime = 1730566800000,
         picture = R.drawable.ic_launcher_background,
         telp = "6284348434398",
         size = 16,
