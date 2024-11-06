@@ -22,8 +22,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.dliemstore.koreancake.NavigationItem
 import com.dliemstore.koreancake.R
+import com.dliemstore.koreancake.ui.NavigationItem
 import com.dliemstore.koreancake.util.CakeData
 
 @Composable
