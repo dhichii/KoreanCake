@@ -1,5 +1,12 @@
 package com.dliemstore.koreancake.ui.components
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.AddCircle
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
@@ -10,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.dliemstore.koreancake.ui.navigation.graphs.MainNavigationItem
 
 data class BottomNavigationItem(
     val title: String,
@@ -21,40 +29,63 @@ data class BottomNavigationItem(
 )
 
 @Composable
-fun BottomNavigationBar(
-    items: List<BottomNavigationItem>,
-    navController: NavController,
-    onItemClick: (BottomNavigationItem) -> Unit
-) {
+fun BottomNavigationBar(navController: NavController) {
     val backStackEntry = navController.currentBackStackEntryAsState()
-    NavigationBar {
-        items.forEach { item ->
-            val selected = item.route == backStackEntry.value?.destination?.route
-            NavigationBarItem(
-                selected = selected,
-                onClick = {
-                    onItemClick(item)
-                },
-                label = { Text(item.title) },
-                icon = {
-                    BadgedBox(
-                        badge = {
-                            if (item.badgeCount != null) {
-                                Badge {
-                                    Text(item.badgeCount.toString())
+    val currentDestination = backStackEntry.value?.destination?.route
+    val items = listOf(
+        BottomNavigationItem(
+            title = "Home",
+            selectedIcon = Icons.Filled.Home,
+            unselectedIcon = Icons.Outlined.Home,
+            route = MainNavigationItem.Home.route,
+            hasNews = false,
+        ),
+        BottomNavigationItem(
+            title = "Add",
+            selectedIcon = Icons.Filled.AddCircle,
+            unselectedIcon = Icons.Outlined.AddCircle,
+            route = MainNavigationItem.Add.route,
+            hasNews = false,
+        ),
+        BottomNavigationItem(
+            title = "Setting",
+            selectedIcon = Icons.Filled.Settings,
+            unselectedIcon = Icons.Outlined.Settings,
+            route = MainNavigationItem.Setting.route,
+            hasNews = false,
+        ),
+    )
+
+    if (items.any { it.route == currentDestination }) {
+        NavigationBar {
+            items.forEach { item ->
+                val selected = item.route == backStackEntry.value?.destination?.route
+                NavigationBarItem(
+                    selected = selected,
+                    onClick = {
+                        navController.navigate(item.route)
+                    },
+                    label = { Text(item.title) },
+                    icon = {
+                        BadgedBox(
+                            badge = {
+                                if (item.badgeCount != null) {
+                                    Badge {
+                                        Text(item.badgeCount.toString())
+                                    }
+                                } else if (item.hasNews) {
+                                    Badge()
                                 }
-                            } else if (item.hasNews) {
-                                Badge()
                             }
+                        ) {
+                            Icon(
+                                imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
+                                contentDescription = item.title
+                            )
                         }
-                    ) {
-                        Icon(
-                            imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
-                            contentDescription = item.title
-                        )
                     }
-                }
-            )
+                )
+            }
         }
     }
 }

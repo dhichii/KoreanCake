@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.dliemstore.koreancake.R
-import com.dliemstore.koreancake.ui.NavigationItem
+import com.dliemstore.koreancake.ui.navigation.graphs.CakeNavigationItem
 import com.dliemstore.koreancake.util.CakeData
 
 @Composable
@@ -104,7 +104,7 @@ fun CakeList(navController: NavController, data: List<CakeData>) {
     LazyColumn(modifier = Modifier.padding(8.dp, 0.dp)) {
         items(data) { item ->
             Cake(item, onItemClick = {
-                navController.navigate(NavigationItem.Cake.route + "/${item.id}")
+                navController.navigate("${CakeNavigationItem.Detail.route}/${item.id}")
             })
         }
     }
