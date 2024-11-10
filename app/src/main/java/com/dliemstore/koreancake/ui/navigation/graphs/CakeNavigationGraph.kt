@@ -64,7 +64,7 @@ fun NavGraphBuilder.cakeNavigationGraph(
             scaffoldViewState.value = ScaffoldViewState(
                 topAppBar = TopAppBarItem(
                     title = "Detail",
-                    navigationIcon = TopAppBarNavigationIcon.DETAIL,
+                    navigationIcon = TopAppBarNavigationIcon.BACK,
                     actions = {
                         IconButton(onClick = {
                             navController.navigate("${CakeNavigationItem.Edit.route}/$id")
@@ -110,7 +110,7 @@ fun NavGraphBuilder.cakeNavigationGraph(
         scaffoldViewState.value = ScaffoldViewState(
             topAppBar = TopAppBarItem(
                 title = "Edit",
-                navigationIcon = TopAppBarNavigationIcon.EDIT
+                navigationIcon = TopAppBarNavigationIcon.CLOSE
             )
         )
         val id = backStackEntry.arguments?.getString("id")!!

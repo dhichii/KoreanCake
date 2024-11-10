@@ -26,14 +26,14 @@ data class ScaffoldViewState(
 )
 
 enum class TopAppBarNavigationIcon {
-    MAIN,
-    DETAIL,
-    EDIT
+    NONE,
+    BACK,
+    CLOSE
 }
 
 data class TopAppBarItem(
     val title: String? = "Korean Cake",
-    val navigationIcon: TopAppBarNavigationIcon = TopAppBarNavigationIcon.MAIN,
+    val navigationIcon: TopAppBarNavigationIcon = TopAppBarNavigationIcon.NONE,
     val actions: @Composable RowScope.() -> Unit = {}
 )
 
@@ -49,8 +49,8 @@ fun Main(navController: NavHostController = rememberNavController()) {
                 title = { scaffoldViewState.value.topAppBar.title?.let { Text(text = it) } },
                 navigationIcon = {
                     when (scaffoldViewState.value.topAppBar.navigationIcon) {
-                        TopAppBarNavigationIcon.MAIN -> {}
-                        TopAppBarNavigationIcon.DETAIL ->
+                        TopAppBarNavigationIcon.NONE -> {}
+                        TopAppBarNavigationIcon.BACK ->
                             IconButton(onClick = { navController.popBackStack() }) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -58,7 +58,7 @@ fun Main(navController: NavHostController = rememberNavController()) {
                                 )
                             }
 
-                        TopAppBarNavigationIcon.EDIT ->
+                        TopAppBarNavigationIcon.CLOSE ->
                             IconButton(onClick = { navController.popBackStack() }) {
                                 Icon(
                                     imageVector = Icons.Filled.Close,
