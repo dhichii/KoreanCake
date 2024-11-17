@@ -22,6 +22,7 @@ fun TextInput(
     label: String,
     placeholder: String? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
+    leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
@@ -40,6 +41,7 @@ fun TextInput(
         onValueChange = onInputChanged,
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         modifier = modifier.onFocusChanged {
             labelFontSize = if (it.isFocused || value != "") TextUnit.Unspecified else 14.sp
