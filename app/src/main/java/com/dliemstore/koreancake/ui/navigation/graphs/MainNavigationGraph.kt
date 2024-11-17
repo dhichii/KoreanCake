@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.dliemstore.koreancake.ui.components.BottomNavigationBar
 import com.dliemstore.koreancake.ui.components.SaveBottomAppBar
+import com.dliemstore.koreancake.ui.screens.add.Add
 import com.dliemstore.koreancake.ui.screens.home.Home
 import com.dliemstore.koreancake.ui.screens.main.ScaffoldViewState
 import com.dliemstore.koreancake.ui.screens.main.TopAppBarItem
@@ -76,7 +77,7 @@ fun MainNavigationGraph(
                 ),
                 bottomAppBar = { SaveBottomAppBar(onClick = {}) }
             )
-            Text("Add")
+            Add()
         }
 
         composable(MainNavigationItem.Setting.route) {
