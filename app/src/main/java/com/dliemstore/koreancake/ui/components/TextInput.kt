@@ -48,3 +48,27 @@ fun TextInput(
         }
     )
 }
+
+@Composable
+fun TelpInput(
+    value: String,
+    onInputChanged: (String) -> Unit,
+    modifier: Modifier = Modifier.fillMaxWidth()
+) {
+    var leadingIconState by remember {
+        mutableStateOf(false)
+    }
+
+    TextInput(
+        value = if (value == "") value else value.substring(2),
+        onInputChanged = {
+            onInputChanged(if (it != "") "62$it" else "")
+        },
+        leadingIcon = if (leadingIconState) {
+            { Text("+62") }
+        } else null,
+        label = "Telp",
+        keyboardType = KeyboardType.Phone,
+        modifier = modifier.onFocusChanged { leadingIconState = it.isFocused || value != "" }
+    )
+}
