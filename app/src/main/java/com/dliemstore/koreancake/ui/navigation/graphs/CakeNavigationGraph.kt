@@ -15,6 +15,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.dliemstore.koreancake.ui.components.SaveBottomAppBar
 import com.dliemstore.koreancake.ui.screens.cake.DetailCake
 import com.dliemstore.koreancake.ui.screens.main.ScaffoldViewState
 import com.dliemstore.koreancake.ui.screens.main.TopAppBarItem
@@ -64,7 +65,7 @@ fun NavGraphBuilder.cakeNavigationGraph(
             scaffoldViewState.value = ScaffoldViewState(
                 topAppBar = TopAppBarItem(
                     title = "Detail",
-                    navigationIcon = TopAppBarNavigationIcon.DETAIL,
+                    navigationIcon = TopAppBarNavigationIcon.BACK,
                     actions = {
                         IconButton(onClick = {
                             navController.navigate("${CakeNavigationItem.Edit.route}/$id")
@@ -110,8 +111,9 @@ fun NavGraphBuilder.cakeNavigationGraph(
         scaffoldViewState.value = ScaffoldViewState(
             topAppBar = TopAppBarItem(
                 title = "Edit",
-                navigationIcon = TopAppBarNavigationIcon.EDIT
-            )
+                navigationIcon = TopAppBarNavigationIcon.CLOSE
+            ),
+            bottomAppBar = { SaveBottomAppBar(onClick = {}) }
         )
         val id = backStackEntry.arguments?.getString("id")!!
 
