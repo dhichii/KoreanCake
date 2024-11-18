@@ -72,7 +72,7 @@ fun MainNavigationGraph(
         ) {
             scaffoldViewState.value = ScaffoldViewState(
                 topAppBar = TopAppBarItem(
-                    title = "Tambah",
+                    title = { Text("Tambah") },
                     navigationIcon = TopAppBarNavigationIcon.CLOSE
                 ),
                 bottomAppBar = { SaveBottomAppBar(onClick = {}) }

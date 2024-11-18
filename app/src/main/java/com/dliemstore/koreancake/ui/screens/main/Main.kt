@@ -1,6 +1,7 @@
 package com.dliemstore.koreancake.ui.screens.main
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -15,8 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.dliemstore.koreancake.R
 import com.dliemstore.koreancake.ui.navigation.graphs.MainNavigationGraph
 
 data class ScaffoldViewState(
@@ -32,7 +38,15 @@ enum class TopAppBarNavigationIcon {
 
 
 data class TopAppBarItem(
-    val title: String? = "Korean Cake",
+    val title: @Composable () -> Unit = {
+        Text(
+            text = stringResource(R.string.app_name),
+            fontFamily = FontFamily(
+                Font(R.font.more_sugar_regular)
+            ),
+            modifier = Modifier.height(22.dp)
+        )
+    },
     val navigationIcon: TopAppBarNavigationIcon = TopAppBarNavigationIcon.NONE,
     val actions: @Composable RowScope.() -> Unit = {}
 )
@@ -46,7 +60,7 @@ fun Main(navController: NavHostController = rememberNavController()) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { scaffoldViewState.value.topAppBar.title?.let { Text(text = it) } },
+                title = scaffoldViewState.value.topAppBar.title,
                 navigationIcon = {
                     when (scaffoldViewState.value.topAppBar.navigationIcon) {
                         TopAppBarNavigationIcon.NONE -> {}

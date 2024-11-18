@@ -64,7 +64,7 @@ fun NavGraphBuilder.cakeNavigationGraph(
 
             scaffoldViewState.value = ScaffoldViewState(
                 topAppBar = TopAppBarItem(
-                    title = "Detail",
+                    title = { Text("Detail") },
                     navigationIcon = TopAppBarNavigationIcon.BACK,
                     actions = {
                         IconButton(onClick = {
@@ -110,7 +110,7 @@ fun NavGraphBuilder.cakeNavigationGraph(
     ) { backStackEntry ->
         scaffoldViewState.value = ScaffoldViewState(
             topAppBar = TopAppBarItem(
-                title = "Edit",
+                title = { Text("Edit") },
                 navigationIcon = TopAppBarNavigationIcon.CLOSE
             ),
             bottomAppBar = { SaveBottomAppBar(onClick = {}) }
