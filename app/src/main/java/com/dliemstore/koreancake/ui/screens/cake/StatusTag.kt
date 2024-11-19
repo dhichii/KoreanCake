@@ -28,7 +28,7 @@ fun StatusTag(status: String) {
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .border(1.dp, colorResource(borderColor), MaterialTheme.shapes.medium)
-            .clip(MaterialTheme.shapes.small)
+            .clip(MaterialTheme.shapes.medium)
             .background(colorResource(backgroundColor))
     ) {
         Text(
