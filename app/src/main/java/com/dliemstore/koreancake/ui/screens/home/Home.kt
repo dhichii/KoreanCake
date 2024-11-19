@@ -20,13 +20,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.dliemstore.koreancake.R
 import com.dliemstore.koreancake.ui.screens.cake.CakeList
 import com.dliemstore.koreancake.ui.theme.KoreanCakeTheme
 import com.dliemstore.koreancake.util.getAllCakeData
@@ -50,24 +48,24 @@ fun Home(navController: NavController) {
                     modifier = Modifier.padding(12.dp)
                 ) {
                     statusOptions.forEachIndexed { index, option ->
-                        var borderColor = R.color.black_700
-                        var backgroundColor = R.color.black_100
-                        var textColor = R.color.black_700
+                        var borderColor = MaterialTheme.colorScheme.tertiary
+                        var backgroundColor = MaterialTheme.colorScheme.background
+                        var textColor = MaterialTheme.colorScheme.tertiary
                         if (statusIndexState == index) {
-                            borderColor = R.color.green_900
-                            backgroundColor = R.color.green_100
-                            textColor = R.color.green_900
+                            borderColor = MaterialTheme.colorScheme.primary
+                            backgroundColor = MaterialTheme.colorScheme.primaryContainer
+                            textColor = MaterialTheme.colorScheme.primary
                         }
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
                                 .border(
                                     1.dp,
-                                    colorResource(borderColor),
+                                    borderColor,
                                     MaterialTheme.shapes.medium
                                 )
-                                .clip(MaterialTheme.shapes.small)
-                                .background(colorResource(backgroundColor))
+                                .clip(MaterialTheme.shapes.medium)
+                                .background(backgroundColor)
                                 .clickable(onClick = {
                                     statusIndexState = index
                                 })
@@ -75,7 +73,7 @@ fun Home(navController: NavController) {
                             Text(
                                 option,
                                 fontSize = 14.sp,
-                                color = colorResource(textColor),
+                                color = textColor,
                                 modifier = Modifier.padding(12.dp, 4.dp)
                             )
                         }
