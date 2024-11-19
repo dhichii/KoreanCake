@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="Theme.KoreanCake.SplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/pink_500</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.KoreanCake</item>
+    </style>
+
     <style name="Theme.KoreanCake" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>
