@@ -16,6 +16,7 @@ data class CakeData(
     val text: String,
     val notes: String? = null,
     val textColor: String,
+    val isUseTopper: Boolean = false,
     val progress: List<Progress>
 )
 
@@ -81,6 +82,7 @@ val cakeList = listOf(
         telp = "6284348434398",
         notes = "Merah",
         size = 16,
+        isUseTopper = true,
         layer = 3,
         text = "HBD",
         textColor = "Putih",
@@ -99,6 +101,7 @@ val cakeList = listOf(
         size = 16,
         text = "HBD",
         textColor = "Putih",
+        isUseTopper = true,
         progress = progressList
     ),
     CakeData(
@@ -145,6 +148,7 @@ val cakeList = listOf(
         size = 16,
         text = "HBD",
         textColor = "Putih",
+        isUseTopper = true,
         progress = progressList
     ),
     CakeData(
@@ -189,6 +193,7 @@ val cakeList = listOf(
         size = 16,
         text = "HBD",
         textColor = "Putih",
+        isUseTopper = true,
         progress = progressList
     ),
     CakeData(
