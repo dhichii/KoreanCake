@@ -25,6 +25,7 @@ import androidx.navigation.NavController
 import com.dliemstore.koreancake.R
 import com.dliemstore.koreancake.ui.navigation.graphs.CakeNavigationItem
 import com.dliemstore.koreancake.util.CakeData
+import com.dliemstore.koreancake.util.formatCurrency
 
 @Composable
 fun Cake(data: CakeData, onItemClick: (CakeData) -> Unit) {
@@ -84,12 +85,12 @@ fun Cake(data: CakeData, onItemClick: (CakeData) -> Unit) {
                 )
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        text = data.price,
+                        text = data.price.formatCurrency(),
                         color = colorResource(R.color.black_700),
                         fontSize = 12.sp,
                     )
                     Text(
-                        text = "(sisa ${data.remainingPayment})",
+                        text = "(sisa ${data.remainingPayment.formatCurrency()})",
                         color = colorResource(R.color.black_500),
                         fontSize = 10.sp
                     )

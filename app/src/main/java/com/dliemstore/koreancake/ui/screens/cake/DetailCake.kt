@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.dliemstore.koreancake.R
 import com.dliemstore.koreancake.ui.components.MultipleCheckBox
 import com.dliemstore.koreancake.ui.theme.KoreanCakeTheme
+import com.dliemstore.koreancake.util.formatCurrency
 import com.dliemstore.koreancake.util.getCakeData
 
 @Composable
@@ -182,18 +183,18 @@ fun DetailCake(id: String) {
                                 fontSize = 12.sp
                             )
                             Text(
-                                text = data.price,
+                                text = data.price.formatCurrency(),
                                 color = colorResource(R.color.black_700),
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
-                                text = data.downPayment,
+                                text = data.downPayment.formatCurrency(),
                                 color = colorResource(R.color.black_700),
                                 fontSize = 12.sp
                             )
                             Text(
-                                text = data.remainingPayment,
+                                text = data.remainingPayment.formatCurrency(),
                                 color = colorResource(R.color.black_700),
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold
