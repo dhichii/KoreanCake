@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.dliemstore.koreancake.ui.screens.login.Login
 import com.dliemstore.koreancake.ui.screens.main.Main
 
 object Graph {
@@ -12,13 +13,27 @@ object Graph {
     const val CAKE = "cake_graph"
 }
 
+enum class RootScreen {
+    ROOT_LOGIN,
+    ROOT_REGISTER
+}
+
+sealed class RootNavigationItem(val route: String) {
+    data object Login : CakeNavigationItem(RootScreen.ROOT_LOGIN.name)
+    data object Register : CakeNavigationItem(RootScreen.ROOT_REGISTER.name)
+}
+
 @Composable
 fun RootNavigationGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
         route = Graph.ROOT,
-        startDestination = Graph.MAIN
+        startDestination = RootNavigationItem.Login.route
     ) {
+        composable(route = RootNavigationItem.Login.route) {
+            Login(navController)
+        }
+
         composable(route = Graph.MAIN) {
             Main()
         }
