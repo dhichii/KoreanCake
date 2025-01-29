@@ -32,6 +32,7 @@ fun TextInput(
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
+    isError: Boolean = false,
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
     var labelFontSize by remember {
@@ -52,6 +53,7 @@ fun TextInput(
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         visualTransformation = visualTransformation,
+        isError = isError,
         modifier = modifier.onFocusChanged {
             labelFontSize = if (it.isFocused || value != "") TextUnit.Unspecified else 14.sp
         }
@@ -62,6 +64,7 @@ fun TextInput(
 fun TelpInput(
     value: String,
     onInputChanged: (String) -> Unit,
+    isError: Boolean = false,
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
     var leadingIconState by remember {
@@ -78,6 +81,7 @@ fun TelpInput(
         } else null,
         label = "Telp",
         keyboardType = KeyboardType.Phone,
+        isError = isError,
         modifier = modifier.onFocusChanged { leadingIconState = it.isFocused || value != "" }
     )
 }
@@ -87,6 +91,7 @@ fun PasswordInput(
     value: String,
     label: String = "Password",
     onInputChanged: (String) -> Unit,
+    isError: Boolean = false,
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
     var isPasswordVisible by remember { mutableStateOf(false) }
@@ -106,6 +111,7 @@ fun PasswordInput(
         },
         label = label,
         keyboardType = KeyboardType.Password,
+        isError = isError,
         modifier = modifier
     )
 }
