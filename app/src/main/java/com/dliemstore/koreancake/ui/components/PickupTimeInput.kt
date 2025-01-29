@@ -51,6 +51,7 @@ fun PickupTimeInput(
                     contentDescription = label
                 )
             },
+            readOnly = true,
             modifier = Modifier.pointerInput(isShowed) {
                 awaitEachGesture {
                     // Modifier.clickable doesn't work for text fields, so we use Modifier.pointerInput

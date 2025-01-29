@@ -33,6 +33,7 @@ fun TextInput(
     trailingIcon: @Composable (() -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     isError: Boolean = false,
+    readOnly: Boolean = false,
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
     var labelFontSize by remember {
@@ -54,6 +55,7 @@ fun TextInput(
         trailingIcon = trailingIcon,
         visualTransformation = visualTransformation,
         isError = isError,
+        readOnly = readOnly,
         modifier = modifier.onFocusChanged {
             labelFontSize = if (it.isFocused || value != "") TextUnit.Unspecified else 14.sp
         }

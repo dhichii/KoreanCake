@@ -49,6 +49,7 @@ fun CustomDatePicker(
         trailingIcon = {
             Icon(Icons.Default.DateRange, contentDescription = "Select date")
         },
+        readOnly = true,
         modifier = modifier
             .fillMaxWidth()
             .pointerInput(selectedDate) {
