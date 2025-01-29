@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.dliemstore.koreancake.ui.screens.login.Login
 import com.dliemstore.koreancake.ui.screens.main.Main
+import com.dliemstore.koreancake.ui.screens.register.Register
 
 object Graph {
     const val ROOT = "root_graph"
@@ -19,8 +20,8 @@ enum class RootScreen {
 }
 
 sealed class RootNavigationItem(val route: String) {
-    data object Login : CakeNavigationItem(RootScreen.ROOT_LOGIN.name)
-    data object Register : CakeNavigationItem(RootScreen.ROOT_REGISTER.name)
+    data object Login : RootNavigationItem(RootScreen.ROOT_LOGIN.name)
+    data object Register : RootNavigationItem(RootScreen.ROOT_REGISTER.name)
 }
 
 @Composable
@@ -32,6 +33,10 @@ fun RootNavigationGraph(navController: NavHostController) {
     ) {
         composable(route = RootNavigationItem.Login.route) {
             Login(navController)
+        }
+
+        composable(route = RootNavigationItem.Register.route) {
+            Register(navController)
         }
 
         composable(route = Graph.MAIN) {
