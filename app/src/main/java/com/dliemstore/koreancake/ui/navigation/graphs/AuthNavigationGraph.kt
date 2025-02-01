@@ -27,12 +27,12 @@ fun NavGraphBuilder.authNavigationGraph(
         startDestination = AuthNavigationItem.Login.route,
     ) {
         composable(route = AuthNavigationItem.Login.route) {
-            scaffoldViewState.value = ScaffoldViewState(topAppBar = TopAppBarItem(title = {}))
+            scaffoldViewState.value = ScaffoldViewState()
             Login(navController)
         }
 
         composable(route = AuthNavigationItem.Register.route) {
-            scaffoldViewState.value = ScaffoldViewState(topAppBar = TopAppBarItem(title = {}))
+            scaffoldViewState.value = ScaffoldViewState()
             Register(navController)
         }
     }

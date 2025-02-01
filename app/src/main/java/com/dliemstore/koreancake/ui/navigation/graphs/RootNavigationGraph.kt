@@ -32,7 +32,7 @@ object Graph {
 }
 
 data class ScaffoldViewState(
-    val topAppBar: TopAppBarItem = TopAppBarItem(),
+    val topAppBar: TopAppBarItem? = null,
     val bottomAppBar: @Composable () -> Unit = {},
 )
 
@@ -65,30 +65,32 @@ fun RootNavigationGraph(isLoggedIn: Boolean, navController: NavHostController) {
     }
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = scaffoldViewState.value.topAppBar.title,
-                navigationIcon = {
-                    when (scaffoldViewState.value.topAppBar.navigationIcon) {
-                        TopAppBarNavigationIcon.NONE -> {}
-                        TopAppBarNavigationIcon.BACK ->
-                            IconButton(onClick = { navController.popBackStack() }) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                    contentDescription = "Back"
-                                )
-                            }
+            scaffoldViewState.value.topAppBar?.let { topAppBar ->
+                TopAppBar(
+                    title = topAppBar.title,
+                    navigationIcon = {
+                        when (topAppBar.navigationIcon) {
+                            TopAppBarNavigationIcon.NONE -> {}
+                            TopAppBarNavigationIcon.BACK ->
+                                IconButton(onClick = { navController.popBackStack() }) {
+                                    Icon(
+                                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                        contentDescription = "Back"
+                                    )
+                                }
 
-                        TopAppBarNavigationIcon.CLOSE ->
-                            IconButton(onClick = { navController.popBackStack() }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Close,
-                                    contentDescription = "Back"
-                                )
-                            }
-                    }
-                },
-                actions = scaffoldViewState.value.topAppBar.actions,
-            )
+                            TopAppBarNavigationIcon.CLOSE ->
+                                IconButton(onClick = { navController.popBackStack() }) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Close,
+                                        contentDescription = "Back"
+                                    )
+                                }
+                        }
+                    },
+                    actions = topAppBar.actions,
+                )
+            }
         },
         bottomBar = scaffoldViewState.value.bottomAppBar
     ) { contentPadding ->
