@@ -14,9 +14,6 @@ import com.dliemstore.koreancake.ui.components.BottomNavigationBar
 import com.dliemstore.koreancake.ui.components.SaveBottomAppBar
 import com.dliemstore.koreancake.ui.screens.add.Add
 import com.dliemstore.koreancake.ui.screens.home.Home
-import com.dliemstore.koreancake.ui.screens.main.ScaffoldViewState
-import com.dliemstore.koreancake.ui.screens.main.TopAppBarItem
-import com.dliemstore.koreancake.ui.screens.main.TopAppBarNavigationIcon
 
 enum class MainScreen {
     HOME,

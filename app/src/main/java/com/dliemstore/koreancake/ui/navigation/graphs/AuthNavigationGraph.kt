@@ -1,5 +1,6 @@
 package com.dliemstore.koreancake.ui.navigation.graphs
 
+import androidx.compose.runtime.MutableState
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -18,17 +19,20 @@ sealed class AuthNavigationItem(val route: String) {
 }
 
 fun NavGraphBuilder.authNavigationGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    scaffoldViewState: MutableState<ScaffoldViewState>
 ) {
     navigation(
         route = Graph.AUTH,
         startDestination = AuthNavigationItem.Login.route,
     ) {
         composable(route = AuthNavigationItem.Login.route) {
+            scaffoldViewState.value = ScaffoldViewState(topAppBar = TopAppBarItem(title = {}))
             Login(navController)
         }
 
         composable(route = AuthNavigationItem.Register.route) {
+            scaffoldViewState.value = ScaffoldViewState(topAppBar = TopAppBarItem(title = {}))
             Register(navController)
         }
     }

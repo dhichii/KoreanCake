@@ -18,9 +18,6 @@ import androidx.navigation.navigation
 import com.dliemstore.koreancake.ui.components.SaveBottomAppBar
 import com.dliemstore.koreancake.ui.screens.cake.DetailCake
 import com.dliemstore.koreancake.ui.screens.cake.edit.EditCake
-import com.dliemstore.koreancake.ui.screens.main.ScaffoldViewState
-import com.dliemstore.koreancake.ui.screens.main.TopAppBarItem
-import com.dliemstore.koreancake.ui.screens.main.TopAppBarNavigationIcon
 
 enum class Screen {
     CAKE_DETAIL,
