@@ -5,12 +5,11 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import com.dliemstore.koreancake.ui.components.BottomNavigationBar
 import com.dliemstore.koreancake.ui.components.SaveBottomAppBar
 import com.dliemstore.koreancake.ui.screens.add.Add
@@ -31,17 +30,13 @@ sealed class MainNavigationItem(val route: String) {
     data object Setting : MainNavigationItem(MainScreen.SETTING.name)
 }
 
-@Composable
-fun MainNavigationGraph(
+fun NavGraphBuilder.mainNavigationGraph(
     navController: NavHostController,
-    modifier: Modifier,
     scaffoldViewState: MutableState<ScaffoldViewState>
 ) {
-    NavHost(
-        navController = navController,
+    navigation(
         route = Graph.MAIN,
-        startDestination = MainNavigationItem.Home.route,
-        modifier = modifier
+        startDestination = MainNavigationItem.Home.route
     ) {
         composable(MainNavigationItem.Home.route) {
             scaffoldViewState.value = ScaffoldViewState(
@@ -87,9 +82,5 @@ fun MainNavigationGraph(
             )
             Text("Setting")
         }
-        cakeNavigationGraph(
-            navController,
-            scaffoldViewState
-        )
     }
 }
