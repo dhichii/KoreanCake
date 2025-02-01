@@ -15,8 +15,11 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         enableEdgeToEdge()
         setContent {
+            val navController = rememberNavController()
+            val isLoggedIn = false
+
             KoreanCakeTheme {
-                RootNavigationGraph(navController = rememberNavController())
+                RootNavigationGraph(isLoggedIn, navController)
             }
         }
     }
