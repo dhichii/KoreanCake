@@ -16,7 +16,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,81 +47,79 @@ fun Register(navController: NavController) {
     val isMatched: Boolean = confirmPassword == password
     var isConfirmPasswordChanged by rememberSaveable { mutableStateOf(false) }
 
-    Scaffold { contentPadding ->
-        Surface(modifier = Modifier.padding(contentPadding)) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(12.dp, 0.dp)
-            ) {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(text = "Buat Akun", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                    TextInput(
-                        value = name,
-                        onInputChanged = { name = it },
-                        label = "Nama"
-                    )
-                    TextInput(
-                        value = username,
-                        onInputChanged = { username = it },
-                        label = "Username"
-                    )
-                    TextInput(
-                        value = email,
-                        onInputChanged = { email = it },
-                        label = "Email",
-                        keyboardType = KeyboardType.Email
-                    )
-                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        PasswordInput(value = password, onInputChanged = { password = it })
-                        Row {
-                            Icon(
-                                imageVector = if (hasMinimum) Icons.Filled.Check else Icons.Filled.Close,
-                                tint = if (hasMinimum) Color.Green else MaterialTheme.colorScheme.error,
-                                contentDescription = "has minimum"
-                            )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(
-                                text = "Minimal 8 huruf",
-                                color = MaterialTheme.colorScheme.inverseSurface
-                            )
-                        }
-                    }
-                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        PasswordInput(
-                            value = confirmPassword,
-                            label = "Konfirmasi Password",
-                            onInputChanged = {
-                                confirmPassword = it
-                                if (!isConfirmPasswordChanged) isConfirmPasswordChanged = true
-                            },
-                            isError = !isMatched && isConfirmPasswordChanged
+    Surface {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp, 0.dp)
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(text = "Buat Akun", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                TextInput(
+                    value = name,
+                    onInputChanged = { name = it },
+                    label = "Nama"
+                )
+                TextInput(
+                    value = username,
+                    onInputChanged = { username = it },
+                    label = "Username"
+                )
+                TextInput(
+                    value = email,
+                    onInputChanged = { email = it },
+                    label = "Email",
+                    keyboardType = KeyboardType.Email
+                )
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    PasswordInput(value = password, onInputChanged = { password = it })
+                    Row {
+                        Icon(
+                            imageVector = if (hasMinimum) Icons.Filled.Check else Icons.Filled.Close,
+                            tint = if (hasMinimum) Color.Green else MaterialTheme.colorScheme.error,
+                            contentDescription = "has minimum"
                         )
-                        if (!isMatched && isConfirmPasswordChanged) Text("Konfirmasi password tidak sama")
-                    }
-                    Button(
-                        onClick = { navController.navigate(AuthNavigationItem.Login.route) },
-                        shape = MaterialTheme.shapes.medium,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Daftar")
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = "Minimal 8 huruf",
+                            color = MaterialTheme.colorScheme.inverseSurface
+                        )
                     }
                 }
-            }
-            Box(
-                contentAlignment = Alignment.BottomCenter,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(12.dp, 8.dp)
-            ) {
-                OutlinedButton(
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    PasswordInput(
+                        value = confirmPassword,
+                        label = "Konfirmasi Password",
+                        onInputChanged = {
+                            confirmPassword = it
+                            if (!isConfirmPasswordChanged) isConfirmPasswordChanged = true
+                        },
+                        isError = !isMatched && isConfirmPasswordChanged
+                    )
+                    if (!isMatched && isConfirmPasswordChanged) Text("Konfirmasi password tidak sama")
+                }
+                Button(
                     onClick = { navController.navigate(AuthNavigationItem.Login.route) },
                     shape = MaterialTheme.shapes.medium,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Sudah punya akun")
+                    Text("Daftar")
                 }
+            }
+        }
+        Box(
+            contentAlignment = Alignment.BottomCenter,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp, 8.dp)
+        ) {
+            OutlinedButton(
+                onClick = { navController.navigate(AuthNavigationItem.Login.route) },
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Sudah punya akun")
             }
         }
     }
