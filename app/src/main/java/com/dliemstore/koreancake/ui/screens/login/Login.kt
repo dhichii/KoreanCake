@@ -50,7 +50,11 @@ fun Login(navController: NavController) {
                     )
                     PasswordInput(value = password, onInputChanged = { password = it })
                     Button(
-                        onClick = { navController.navigate(Graph.MAIN) },
+                        onClick = {
+                            navController.navigate(Graph.MAIN) {
+                                popUpTo(AuthNavigationItem.Login.route) { inclusive = true }
+                            }
+                        },
                         shape = MaterialTheme.shapes.medium,
                         modifier = Modifier.fillMaxWidth()
                     ) {
