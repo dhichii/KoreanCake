@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.dliemstore.koreancake.ui.components.PasswordInput
 import com.dliemstore.koreancake.ui.components.TextInput
-import com.dliemstore.koreancake.ui.navigation.graphs.RootNavigationItem
+import com.dliemstore.koreancake.ui.navigation.graphs.AuthNavigationItem
 
 @Composable
 fun Register(navController: NavController) {
@@ -102,7 +102,7 @@ fun Register(navController: NavController) {
                         if (!isMatched && isConfirmPasswordChanged) Text("Konfirmasi password tidak sama")
                     }
                     Button(
-                        onClick = { navController.navigate(RootNavigationItem.Login.route) },
+                        onClick = { navController.navigate(AuthNavigationItem.Login.route) },
                         shape = MaterialTheme.shapes.medium,
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -117,7 +117,7 @@ fun Register(navController: NavController) {
                     .padding(12.dp, 8.dp)
             ) {
                 OutlinedButton(
-                    onClick = { navController.navigate(RootNavigationItem.Login.route) },
+                    onClick = { navController.navigate(AuthNavigationItem.Login.route) },
                     shape = MaterialTheme.shapes.medium,
                     modifier = Modifier.fillMaxWidth()
                 ) {

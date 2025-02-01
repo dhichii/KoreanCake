@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.dliemstore.koreancake.ui.components.PasswordInput
 import com.dliemstore.koreancake.ui.components.TextInput
+import com.dliemstore.koreancake.ui.navigation.graphs.AuthNavigationItem
 import com.dliemstore.koreancake.ui.navigation.graphs.Graph
-import com.dliemstore.koreancake.ui.navigation.graphs.RootNavigationItem
 
 @Composable
 fun Login(navController: NavController) {
@@ -65,7 +65,7 @@ fun Login(navController: NavController) {
                     .padding(12.dp, 8.dp)
             ) {
                 OutlinedButton(
-                    onClick = { navController.navigate(RootNavigationItem.Register.route) },
+                    onClick = { navController.navigate(AuthNavigationItem.Register.route) },
                     shape = MaterialTheme.shapes.medium,
                     modifier = Modifier.fillMaxWidth()
                 ) {
