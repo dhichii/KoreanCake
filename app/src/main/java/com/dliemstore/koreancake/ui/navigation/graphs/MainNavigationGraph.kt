@@ -17,13 +17,11 @@ import com.dliemstore.koreancake.ui.screens.home.Home
 enum class MainScreen {
     HOME,
     ADD,
-    SETTING,
 }
 
 sealed class MainNavigationItem(val route: String) {
     data object Home : MainNavigationItem(MainScreen.HOME.name)
     data object Add : MainNavigationItem(MainScreen.ADD.name)
-    data object Setting : MainNavigationItem(MainScreen.SETTING.name)
 }
 
 fun NavGraphBuilder.mainNavigationGraph(
@@ -68,14 +66,6 @@ fun NavGraphBuilder.mainNavigationGraph(
                 )
             )
             Add()
-        }
-
-        composable(MainNavigationItem.Setting.route) {
-            scaffoldViewState.value = ScaffoldViewState(
-                topAppBar = TopAppBarItem(),
-                bottomAppBar = { BottomNavigationBar(navController) }
-            )
-            Text("Setting")
         }
     }
 }

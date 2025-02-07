@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.dliemstore.koreancake.ui.navigation.graphs.MainNavigationItem
+import com.dliemstore.koreancake.ui.navigation.graphs.SettingsNavigationItem
 
 data class BottomNavigationItem(
     val title: String,
@@ -58,7 +59,7 @@ fun BottomNavigationBar(navController: NavController) {
             title = "Setting",
             selectedIcon = Icons.Filled.Settings,
             unselectedIcon = Icons.Outlined.Settings,
-            route = MainNavigationItem.Setting.route,
+            route = SettingsNavigationItem.Main.route,
             hasNews = false,
         ),
     )
