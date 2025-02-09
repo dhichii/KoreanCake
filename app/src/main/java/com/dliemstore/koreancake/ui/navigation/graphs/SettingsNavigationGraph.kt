@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.dliemstore.koreancake.ui.components.BottomNavigationBar
 import com.dliemstore.koreancake.ui.screens.settings.Settings
+import com.dliemstore.koreancake.ui.screens.settings.SettingsForm
 
 enum class SettingsScreen {
     SETTINGS_MAIN,
@@ -25,6 +26,20 @@ sealed class SettingsNavigationItem(val route: String) {
     data object Password : SettingsNavigationItem(SettingsScreen.SETTINGS_PASSWORD.name)
 }
 
+sealed class SettingType(
+    val fieldLabel: String,
+    val route: String
+) {
+    data object Profile :
+        SettingType("Nama", route = SettingsNavigationItem.Profile.route)
+
+    data object Email :
+        SettingType("Email Baru", route = SettingsNavigationItem.Email.route)
+
+    data object Username :
+        SettingType("Username Baru", route = SettingsNavigationItem.Username.route)
+}
+
 fun NavGraphBuilder.settingsNavigationGraph(
     navController: NavHostController,
     scaffoldViewState: MutableState<ScaffoldViewState>
@@ -35,7 +50,7 @@ fun NavGraphBuilder.settingsNavigationGraph(
     ) {
         composable(route = SettingsNavigationItem.Main.route) {
             scaffoldViewState.value = ScaffoldViewState(
-                topAppBar = TopAppBarItem(title = { Text("Settings")}),
+                topAppBar = TopAppBarItem(title = { Text("Settings") }),
                 bottomAppBar = { BottomNavigationBar(navController) }
             )
             Settings(navController)
@@ -48,6 +63,7 @@ fun NavGraphBuilder.settingsNavigationGraph(
                     navigationIcon = TopAppBarNavigationIcon.CLOSE
                 )
             )
+            SettingsForm(SettingType.Profile, navController)
         }
 
         composable(route = SettingsNavigationItem.Email.route) {
@@ -57,6 +73,7 @@ fun NavGraphBuilder.settingsNavigationGraph(
                     navigationIcon = TopAppBarNavigationIcon.CLOSE
                 )
             )
+            SettingsForm(SettingType.Email, navController)
         }
 
         composable(route = SettingsNavigationItem.Username.route) {
@@ -66,6 +83,7 @@ fun NavGraphBuilder.settingsNavigationGraph(
                     navigationIcon = TopAppBarNavigationIcon.CLOSE
                 )
             )
+            SettingsForm(SettingType.Username, navController)
         }
 
         composable(route = SettingsNavigationItem.Password.route) {
