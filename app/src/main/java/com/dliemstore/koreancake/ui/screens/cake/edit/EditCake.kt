@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +25,7 @@ import com.dliemstore.koreancake.R
 import com.dliemstore.koreancake.ui.components.CustomCheckBox
 import com.dliemstore.koreancake.ui.components.CustomDatePicker
 import com.dliemstore.koreancake.ui.components.PickupTimeInput
+import com.dliemstore.koreancake.ui.components.SecondaryButton
 import com.dliemstore.koreancake.ui.components.TelpInput
 import com.dliemstore.koreancake.ui.components.TextInput
 import com.dliemstore.koreancake.ui.components.pickupMinuteItems
@@ -74,7 +74,7 @@ fun EditCake(id: String) {
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.fillMaxWidth()
                 )
-                OutlinedButton(onClick = {}) { Text("Tambah Foto") }
+                SecondaryButton(text = "Tambah Foto", onClick = {})
             }
             Column(
                 verticalArrangement = Arrangement.spacedBy(4.dp),

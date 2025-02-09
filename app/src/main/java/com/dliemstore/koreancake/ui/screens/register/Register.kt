@@ -12,10 +12,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.dliemstore.koreancake.ui.components.PasswordInput
+import com.dliemstore.koreancake.ui.components.PrimaryButton
+import com.dliemstore.koreancake.ui.components.SecondaryButton
 import com.dliemstore.koreancake.ui.components.TextInput
 import com.dliemstore.koreancake.ui.navigation.graphs.AuthNavigationItem
 
@@ -99,13 +99,11 @@ fun Register(navController: NavController) {
                     )
                     if (!isMatched && isConfirmPasswordChanged) Text("Konfirmasi password tidak sama")
                 }
-                Button(
+                PrimaryButton(
+                    text = "Daftar",
                     onClick = { navController.navigate(AuthNavigationItem.Login.route) },
-                    shape = MaterialTheme.shapes.medium,
                     modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Daftar")
-                }
+                )
             }
         }
         Box(
@@ -114,13 +112,11 @@ fun Register(navController: NavController) {
                 .fillMaxSize()
                 .padding(12.dp, 8.dp)
         ) {
-            OutlinedButton(
+            SecondaryButton(
+                text = "Sudah punya akun",
                 onClick = { navController.navigate(AuthNavigationItem.Login.route) },
-                shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Sudah punya akun")
-            }
+            )
         }
     }
 }
