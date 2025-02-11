@@ -33,6 +33,7 @@ fun Cake(data: CakeData, onItemClick: (CakeData) -> Unit) {
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
         ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         modifier = Modifier
             .padding(bottom = 8.dp)
             .clickable {
