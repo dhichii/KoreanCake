@@ -59,6 +59,7 @@ fun Settings(navController: NavController) {
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
             modifier = Modifier.padding(12.dp, 8.dp)
         ) {
             Column {
@@ -84,6 +85,7 @@ fun Settings(navController: NavController) {
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
             modifier = Modifier.padding(12.dp, 8.dp)
         ) {
             // logout
