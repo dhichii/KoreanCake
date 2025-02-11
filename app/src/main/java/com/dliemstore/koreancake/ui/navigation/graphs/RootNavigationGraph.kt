@@ -29,6 +29,7 @@ object Graph {
     const val AUTH = "auth_graph"
     const val MAIN = "main_graph"
     const val CAKE = "cake_graph"
+    const val PROCESS = "process_graph"
     const val SETTINGS = "settings_graph"
 }
 
@@ -104,6 +105,7 @@ fun RootNavigationGraph(isLoggedIn: Boolean, navController: NavHostController) {
             authNavigationGraph(navController, scaffoldViewState)
             mainNavigationGraph(navController, scaffoldViewState)
             cakeNavigationGraph(navController, scaffoldViewState)
+            processNavigationGraph(navController, scaffoldViewState)
             settingsNavigationGraph(navController, scaffoldViewState)
         }
     }
