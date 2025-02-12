@@ -61,7 +61,7 @@ fun NavGraphBuilder.mainNavigationGraph(
         ) {
             scaffoldViewState.value = ScaffoldViewState(
                 topAppBar = TopAppBarItem(
-                    title = { Text("Tambah") },
+                    title = { Text("Tambah Order") },
                     navigationIcon = TopAppBarNavigationIcon.CLOSE
                 )
             )

@@ -1,5 +1,9 @@
 package com.dliemstore.koreancake.ui.navigation.graphs
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
@@ -18,6 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.dliemstore.koreancake.ui.components.BottomNavigationBar
 import com.dliemstore.koreancake.ui.components.SaveBottomAppBar
+import com.dliemstore.koreancake.ui.screens.process.AddProcess
 import com.dliemstore.koreancake.ui.screens.process.Process
 
 enum class ProcessScreen {
@@ -82,9 +87,32 @@ fun NavGraphBuilder.processNavigationGraph(
             Process(navController, isReorderEnabled)
         }
 
-        composable(route = ProcessNavigationItem.Add.route) {
-            scaffoldViewState.value = ScaffoldViewState()
-            Text("Add")
+        composable(
+            route = ProcessNavigationItem.Add.route,
+            enterTransition = {
+                fadeIn(animationSpec = tween(500)) + slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Up, tween(500)
+                )
+            },
+            exitTransition = {
+                fadeOut()
+            },
+            popEnterTransition = {
+                fadeIn()
+            },
+            popExitTransition = {
+                fadeOut(animationSpec = tween(500)) + slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Down, tween(500)
+                )
+            }
+        ) {
+            scaffoldViewState.value = ScaffoldViewState(
+                topAppBar = TopAppBarItem(
+                    title = { Text("Tambah Proses") },
+                    navigationIcon = TopAppBarNavigationIcon.CLOSE
+                )
+            )
+            AddProcess(navController)
         }
 
         composable(route = "${ProcessNavigationItem.Edit.route}/{id}") { backStackEntry ->
