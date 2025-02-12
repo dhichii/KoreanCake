@@ -15,7 +15,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.dliemstore.koreancake.ui.components.SaveBottomAppBar
+import com.dliemstore.koreancake.ui.components.BottomAppBar
 import com.dliemstore.koreancake.ui.screens.cake.DetailCake
 import com.dliemstore.koreancake.ui.screens.cake.edit.EditCake
 
@@ -111,7 +111,7 @@ fun NavGraphBuilder.cakeNavigationGraph(
                 title = { Text("Edit") },
                 navigationIcon = TopAppBarNavigationIcon.CLOSE
             ),
-            bottomAppBar = { SaveBottomAppBar(onClick = {}) }
+            bottomAppBar = BottomAppBar.Save(onClick = {})
         )
         val id = backStackEntry.arguments?.getString("id")!!
 

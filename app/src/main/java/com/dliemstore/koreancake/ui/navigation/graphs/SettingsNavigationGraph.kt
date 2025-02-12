@@ -6,7 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.dliemstore.koreancake.ui.components.BottomNavigationBar
+import com.dliemstore.koreancake.ui.components.BottomAppBar
 import com.dliemstore.koreancake.ui.screens.settings.ChangePassword
 import com.dliemstore.koreancake.ui.screens.settings.Settings
 import com.dliemstore.koreancake.ui.screens.settings.SettingsForm
@@ -52,7 +52,7 @@ fun NavGraphBuilder.settingsNavigationGraph(
         composable(route = SettingsNavigationItem.Main.route) {
             scaffoldViewState.value = ScaffoldViewState(
                 topAppBar = TopAppBarItem(title = { Text("Settings") }),
-                bottomAppBar = { BottomNavigationBar(navController) }
+                bottomAppBar = BottomAppBar.Navigation
             )
             Settings(navController)
         }

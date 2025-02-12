@@ -10,7 +10,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.dliemstore.koreancake.ui.components.BottomNavigationBar
+import com.dliemstore.koreancake.ui.components.BottomAppBar
 import com.dliemstore.koreancake.ui.screens.add.Add
 import com.dliemstore.koreancake.ui.screens.home.Home
 
@@ -35,7 +35,7 @@ fun NavGraphBuilder.mainNavigationGraph(
         composable(MainNavigationItem.Home.route) {
             scaffoldViewState.value = ScaffoldViewState(
                 topAppBar = TopAppBarItem(),
-                bottomAppBar = { BottomNavigationBar(navController) }
+                bottomAppBar = BottomAppBar.Navigation
             )
             Home(navController)
         }

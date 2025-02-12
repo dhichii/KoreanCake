@@ -25,6 +25,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.dliemstore.koreancake.R
+import com.dliemstore.koreancake.ui.components.BottomAppBar
 
 object Graph {
     const val ROOT = "root_graph"
@@ -37,7 +38,7 @@ object Graph {
 
 data class ScaffoldViewState(
     val topAppBar: TopAppBarItem? = null,
-    val bottomAppBar: @Composable () -> Unit = {},
+    val bottomAppBar: BottomAppBar = BottomAppBar.None,
 )
 
 sealed class TopAppBarNavigationIcon {
@@ -113,7 +114,7 @@ fun RootNavigationGraph(isLoggedIn: Boolean, navController: NavHostController) {
                 )
             }
         },
-        bottomBar = scaffoldViewState.value.bottomAppBar
+        bottomBar = { BottomAppBar(scaffoldViewState.value.bottomAppBar, navController) }
     ) { contentPadding ->
         NavHost(
             navController = navController,

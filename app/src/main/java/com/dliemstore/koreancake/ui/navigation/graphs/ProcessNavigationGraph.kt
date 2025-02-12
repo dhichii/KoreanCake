@@ -20,8 +20,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.dliemstore.koreancake.ui.components.BottomNavigationBar
-import com.dliemstore.koreancake.ui.components.SaveBottomAppBar
+import com.dliemstore.koreancake.ui.components.BottomAppBar
 import com.dliemstore.koreancake.ui.screens.process.AddProcess
 import com.dliemstore.koreancake.ui.screens.process.Process
 
@@ -74,14 +73,12 @@ fun NavGraphBuilder.processNavigationGraph(
                         contentDescription = "Close",
                         onClick = { isReorderEnabled = false })
                 ),
-                bottomAppBar = {
-                    if (!isReorderEnabled) {
-                        BottomNavigationBar(
-                            navController
-                        )
-                    } else {
-                        SaveBottomAppBar(onClick = { isReorderEnabled = false })
-                    }
+                bottomAppBar =
+                if (!isReorderEnabled) {
+                    BottomAppBar.Navigation
+                } else {
+                    BottomAppBar.Save(onClick = { isReorderEnabled = false })
+
                 }
             )
             Process(navController, isReorderEnabled)

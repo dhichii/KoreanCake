@@ -21,6 +21,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
@@ -29,6 +30,26 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.dliemstore.koreancake.ui.navigation.graphs.MainNavigationItem
 import com.dliemstore.koreancake.ui.navigation.graphs.ProcessNavigationItem
 import com.dliemstore.koreancake.ui.navigation.graphs.SettingsNavigationItem
+
+sealed class BottomAppBar {
+    data object None : BottomAppBar()
+    data object Navigation : BottomAppBar()
+    class Save(val onClick: () -> Unit) : BottomAppBar()
+}
+
+@Composable
+fun BottomAppBar(type: BottomAppBar, navController: NavController) {
+    when (type) {
+        BottomAppBar.None -> {}
+        BottomAppBar.Navigation -> {
+            BottomNavigationBar(navController)
+        }
+
+        is BottomAppBar.Save -> {
+            SaveBottomAppBar(onClick = type.onClick)
+        }
+    }
+}
 
 data class BottomNavigationItem(
     val title: String,
@@ -41,8 +62,8 @@ data class BottomNavigationItem(
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
-    val backStackEntry = navController.currentBackStackEntryAsState()
-    val currentDestination = backStackEntry.value?.destination?.route
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.route
     val items = listOf(
         BottomNavigationItem(
             title = "Beranda",
@@ -74,14 +95,19 @@ fun BottomNavigationBar(navController: NavController) {
         ),
     )
 
-    if (items.any { it.route == currentDestination }) {
+    if (items.any { it.route == currentRoute }) {
         NavigationBar {
             items.forEach { item ->
-                val selected = item.route == backStackEntry.value?.destination?.route
+                val selected = item.route == currentRoute
                 NavigationBarItem(
                     selected = selected,
                     onClick = {
-                        navController.navigate(item.route)
+                        if (!selected) {
+                            navController.navigate(item.route) {
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }
                     },
                     label = { Text(item.title) },
                     icon = {
