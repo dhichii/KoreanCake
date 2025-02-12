@@ -22,6 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.dliemstore.koreancake.ui.components.BottomAppBar
 import com.dliemstore.koreancake.ui.screens.process.AddProcess
+import com.dliemstore.koreancake.ui.screens.process.EditProcess
 import com.dliemstore.koreancake.ui.screens.process.Process
 
 enum class ProcessScreen {
@@ -112,11 +113,34 @@ fun NavGraphBuilder.processNavigationGraph(
             AddProcess(navController)
         }
 
-        composable(route = "${ProcessNavigationItem.Edit.route}/{id}") { backStackEntry ->
+        composable(
+            route = "${ProcessNavigationItem.Edit.route}/{id}",
+            enterTransition = {
+                fadeIn(animationSpec = tween(500)) + slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Up, tween(500)
+                )
+            },
+            exitTransition = {
+                fadeOut()
+            },
+            popEnterTransition = {
+                fadeIn()
+            },
+            popExitTransition = {
+                fadeOut(animationSpec = tween(500)) + slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Down, tween(500)
+                )
+            }
+        ) { backStackEntry ->
             val id = backStackEntry.arguments?.getString("id")!!
 
-            scaffoldViewState.value = ScaffoldViewState()
-            Text("Edit $id")
+            scaffoldViewState.value = ScaffoldViewState(
+                topAppBar = TopAppBarItem(
+                    title = { Text("Edit Proses") },
+                    navigationIcon = TopAppBarNavigationIcon.CLOSE
+                )
+            )
+            EditProcess(id, navController)
         }
     }
 }
