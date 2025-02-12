@@ -7,10 +7,6 @@ import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Checklist
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.AddCircle
-import androidx.compose.material.icons.outlined.Checklist
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.BottomAppBar
@@ -54,8 +50,7 @@ fun BottomAppBar(type: BottomAppBar, navController: NavController) {
 data class BottomNavigationItem(
     val title: String,
     val route: String,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
+    val icon: ImageVector,
     val hasNews: Boolean,
     val badgeCount: Int? = null
 )
@@ -67,29 +62,25 @@ fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
         BottomNavigationItem(
             title = "Beranda",
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home,
+            icon = Icons.Filled.Home,
             route = MainNavigationItem.Home.route,
             hasNews = false,
         ),
         BottomNavigationItem(
             title = "Tambah",
-            selectedIcon = Icons.Filled.AddCircle,
-            unselectedIcon = Icons.Outlined.AddCircle,
+            icon = Icons.Filled.AddCircle,
             route = MainNavigationItem.Add.route,
             hasNews = false,
         ),
         BottomNavigationItem(
             title = "Proses",
-            selectedIcon = Icons.Filled.Checklist,
-            unselectedIcon = Icons.Outlined.Checklist,
+            icon = Icons.Filled.Checklist,
             route = ProcessNavigationItem.Main.route,
             hasNews = false,
         ),
         BottomNavigationItem(
             title = "Pengaturan",
-            selectedIcon = Icons.Filled.Settings,
-            unselectedIcon = Icons.Outlined.Settings,
+            icon = Icons.Filled.Settings,
             route = SettingsNavigationItem.Main.route,
             hasNews = false,
         ),
@@ -123,7 +114,7 @@ fun BottomNavigationBar(navController: NavController) {
                             }
                         ) {
                             Icon(
-                                imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
+                                imageVector = item.icon,
                                 contentDescription = item.title
                             )
                         }
