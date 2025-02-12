@@ -224,3 +224,41 @@ fun getAllCakeData(status: String): List<CakeData> {
 fun getCakeData(id: String): CakeData {
     return cakeList.find { value -> value.id == id }!!
 }
+
+data class ProcessData(val id: String, val name: String, val step: Int)
+
+val processList = listOf(
+    ProcessData(
+        id = "1",
+        name = "process 1",
+        step = 1,
+    ),
+    ProcessData(
+        id = "2",
+        name = "process 2",
+        step = 2,
+    ),
+    ProcessData(
+        id = "3",
+        name = "process 3",
+        step = 3,
+    ),
+    ProcessData(
+        id = "4",
+        name = "process 4",
+        step = 4,
+    ),
+    ProcessData(
+        id = "5",
+        name = "process 5",
+        step = 5,
+    ),
+)
+
+fun getAllProcesses(): List<ProcessData> {
+    return processList
+}
+
+fun getProcessById(id: String): ProcessData {
+    return processList.find { value -> value.id == id }!!
+}
