@@ -45,28 +45,28 @@ fun BottomNavigationBar(navController: NavController) {
     val currentDestination = backStackEntry.value?.destination?.route
     val items = listOf(
         BottomNavigationItem(
-            title = "Home",
+            title = "Beranda",
             selectedIcon = Icons.Filled.Home,
             unselectedIcon = Icons.Outlined.Home,
             route = MainNavigationItem.Home.route,
             hasNews = false,
         ),
         BottomNavigationItem(
-            title = "Add",
+            title = "Tambah",
             selectedIcon = Icons.Filled.AddCircle,
             unselectedIcon = Icons.Outlined.AddCircle,
             route = MainNavigationItem.Add.route,
             hasNews = false,
         ),
         BottomNavigationItem(
-            title = "Process",
+            title = "Proses",
             selectedIcon = Icons.Filled.Checklist,
             unselectedIcon = Icons.Outlined.Checklist,
             route = ProcessNavigationItem.Main.route,
             hasNews = false,
         ),
         BottomNavigationItem(
-            title = "Setting",
+            title = "Pengaturan",
             selectedIcon = Icons.Filled.Settings,
             unselectedIcon = Icons.Outlined.Settings,
             route = SettingsNavigationItem.Main.route,
