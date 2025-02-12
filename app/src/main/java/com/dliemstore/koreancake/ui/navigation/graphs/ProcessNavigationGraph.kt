@@ -50,7 +50,7 @@ fun NavGraphBuilder.processNavigationGraph(
 
             scaffoldViewState.value = ScaffoldViewState(
                 topAppBar = if (!isReorderEnabled) TopAppBarItem(
-                    title = { Text("Process") },
+                    title = { Text("Proses Pembuatan") },
                     actions = {
                         IconButton(onClick = {
                             navController.navigate(ProcessNavigationItem.Add.route)
@@ -68,7 +68,7 @@ fun NavGraphBuilder.processNavigationGraph(
                         }
                     }
                 ) else TopAppBarItem(
-                    title = { Text("Process") },
+                    title = { Text("Urutkan") },
                     navigationIcon = TopAppBarNavigationIcon.Custom(
                         icon = Icons.Filled.Close,
                         contentDescription = "Close",
