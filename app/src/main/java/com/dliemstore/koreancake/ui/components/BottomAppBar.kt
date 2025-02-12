@@ -115,6 +115,7 @@ fun BottomNavigationBar(navController: NavController) {
                         ) {
                             Icon(
                                 imageVector = item.icon,
+                                tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
                                 contentDescription = item.title
                             )
                         }
