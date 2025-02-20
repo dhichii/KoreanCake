@@ -1,5 +1,6 @@
 package com.dliemstore.koreancake.data.api
 
+import com.dliemstore.koreancake.data.api.service.AuthService
 import com.dliemstore.koreancake.util.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -30,4 +31,9 @@ object ApiModule {
             .client(okHttpClient)
             .build()
     }
+
+    @Provides
+    @Singleton
+    fun provideAuthService(retrofit: Retrofit): AuthService =
+        retrofit.create(AuthService::class.java)
 }
