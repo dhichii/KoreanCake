@@ -59,7 +59,6 @@ fun ChangePassword(navController: NavController) {
                     confirmPassword = it
                     if (!isConfirmPasswordChanged) isConfirmPasswordChanged = true
                 },
-                isError = !isMatched && isConfirmPasswordChanged
             )
             if (!isMatched && isConfirmPasswordChanged) Text("Konfirmasi password tidak sama")
         }

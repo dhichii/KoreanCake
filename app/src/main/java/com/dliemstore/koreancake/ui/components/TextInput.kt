@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +33,7 @@ fun TextInput(
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    isError: Boolean = false,
+    errorMessage: String? = null,
     readOnly: Boolean = false,
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
@@ -54,19 +55,22 @@ fun TextInput(
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         visualTransformation = visualTransformation,
-        isError = isError,
+        isError = errorMessage != null,
         readOnly = readOnly,
         modifier = modifier.onFocusChanged {
             labelFontSize = if (it.isFocused || value != "") TextUnit.Unspecified else 14.sp
         }
     )
+    errorMessage?.let {
+        Text(text = it, color = MaterialTheme.colorScheme.error, fontSize = 12.sp)
+    }
 }
 
 @Composable
 fun TelpInput(
     value: String,
     onInputChanged: (String) -> Unit,
-    isError: Boolean = false,
+    errorMessage: String? = null,
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
     var leadingIconState by remember {
@@ -83,7 +87,7 @@ fun TelpInput(
         } else null,
         label = "Telp",
         keyboardType = KeyboardType.Phone,
-        isError = isError,
+        errorMessage = errorMessage,
         modifier = modifier.onFocusChanged { leadingIconState = it.isFocused || value != "" }
     )
 }
@@ -93,7 +97,7 @@ fun PasswordInput(
     value: String,
     label: String = "Password",
     onInputChanged: (String) -> Unit,
-    isError: Boolean = false,
+    errorMessage: String? = null,
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
     var isPasswordVisible by remember { mutableStateOf(false) }
@@ -113,7 +117,7 @@ fun PasswordInput(
         },
         label = label,
         keyboardType = KeyboardType.Password,
-        isError = isError,
+        errorMessage = errorMessage,
         modifier = modifier
     )
 }
