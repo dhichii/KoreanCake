@@ -48,6 +48,7 @@ fun Register(navController: NavController, viewModel: RegisterViewModel = hiltVi
     LaunchedEffect(registerState.errorMessage) {
         registerState.errorMessage?.let {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            viewModel.clearErrorMessage()
         }
     }
 

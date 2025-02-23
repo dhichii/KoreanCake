@@ -21,6 +21,10 @@ class RegisterViewModel @Inject constructor(private val authRepository: AuthRepo
     private val _registerState = MutableStateFlow(RegisterState())
     val registerState = _registerState.asStateFlow()
 
+    fun clearErrorMessage() {
+        _registerState.update { it.copy(errorMessage = null) }
+    }
+
     fun onInputChange(field: String, value: String) {
         val state = _registerState.value
         val newErrors = state.errors.toMutableMap()
