@@ -7,9 +7,12 @@ import com.dliemstore.koreancake.util.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import java.io.IOException
 import javax.inject.Inject
 
-class AuthRepository @Inject constructor(private val authService: AuthService) {
+class AuthRepository @Inject constructor(
+    private val authService: AuthService,
+) {
     fun register(
         name: String,
         email: String,
@@ -24,16 +27,25 @@ class AuthRepository @Inject constructor(private val authService: AuthService) {
             if (response.isSuccessful) {
                 emit(Resource.Success(Unit, response.code()))
             } else {
-                val errorResponse = try {
-                    ApiUtils.parseError(response)
-                } catch (e: Exception) {
-                    null
+                val errorResponse = runCatching { ApiUtils.parseError(response) }.getOrNull()
+                val errorMessage = when (response.code()) {
+                    400 -> if (errorResponse?.message == "Bad Request") {
+                        "Registrasi gagal. Mohon periksa kembali."
+                    } else errorResponse?.message ?: "Permintaan tidak valid."
+
+                    500 -> "Terjadi kesalahan pada server. Silakan coba lagi nanti."
+                    else -> errorResponse?.message ?: "Registrasi gagal. Silakan coba lagi."
                 }
 
-                emit(Resource.Error(null, response.code(), errorResponse))
+                emit(Resource.Error(errorMessage, response.code(), errorResponse))
             }
         } catch (e: Exception) {
-            emit(Resource.Error("Something went wrong, Please try again later!"))
+            val errorMessage = if (e is IOException) {
+                "Tidak dapat terhubung ke server. Periksa koneksi internet Anda."
+            } else {
+                "Terjadi kesalahan yang tidak terduga. Silakan coba lagi nanti."
+            }
+            emit(Resource.Error(errorMessage))
         }
     }.flowOn(Dispatchers.IO)
 }
