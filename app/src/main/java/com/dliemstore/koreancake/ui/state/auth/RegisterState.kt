@@ -1,4 +1,4 @@
-package com.dliemstore.koreancake.ui.state
+package com.dliemstore.koreancake.ui.state.auth
 
 data class RegisterState(
     val name: String = "",

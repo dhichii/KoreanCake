@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dliemstore.koreancake.data.source.repository.auth.AuthRepository
 import com.dliemstore.koreancake.domain.validation.RegisterValidator
-import com.dliemstore.koreancake.ui.state.RegisterState
+import com.dliemstore.koreancake.ui.state.auth.RegisterState
 import com.dliemstore.koreancake.util.ApiUtils
 import com.dliemstore.koreancake.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
