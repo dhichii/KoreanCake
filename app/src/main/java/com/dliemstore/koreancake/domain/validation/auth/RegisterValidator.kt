@@ -1,4 +1,4 @@
-package com.dliemstore.koreancake.domain.validation
+package com.dliemstore.koreancake.domain.validation.auth
 
 import com.dliemstore.koreancake.util.RegexUtils
 import com.dliemstore.koreancake.util.ValidationHelper
