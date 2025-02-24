@@ -1,6 +1,8 @@
 package com.dliemstore.koreancake.data.source.repository.auth
 
+import com.dliemstore.koreancake.data.api.TokenManager
 import com.dliemstore.koreancake.data.api.service.AuthService
+import com.dliemstore.koreancake.data.source.remote.request.auth.LoginRequest
 import com.dliemstore.koreancake.data.source.remote.request.auth.RegisterRequest
 import com.dliemstore.koreancake.util.ApiUtils
 import com.dliemstore.koreancake.util.Resource
@@ -12,6 +14,7 @@ import javax.inject.Inject
 
 class AuthRepository @Inject constructor(
     private val authService: AuthService,
+    private val tokenManager: TokenManager
 ) {
     fun register(
         name: String,
@@ -35,6 +38,42 @@ class AuthRepository @Inject constructor(
 
                     500 -> "Terjadi kesalahan pada server. Silakan coba lagi nanti."
                     else -> errorResponse?.message ?: "Registrasi gagal. Silakan coba lagi."
+                }
+
+                emit(Resource.Error(errorMessage, response.code(), errorResponse))
+            }
+        } catch (e: Exception) {
+            val errorMessage = if (e is IOException) {
+                "Tidak dapat terhubung ke server. Periksa koneksi internet Anda."
+            } else {
+                "Terjadi kesalahan yang tidak terduga. Silakan coba lagi nanti."
+            }
+            emit(Resource.Error(errorMessage))
+        }
+    }.flowOn(Dispatchers.IO)
+
+    fun login(
+        username: String,
+        password: String
+    ) = flow {
+        emit(Resource.Loading())
+
+        try {
+            val response =
+                authService.login(LoginRequest(username, password))
+            if (response.isSuccessful) {
+                response.body()?.data?.access?.let { tokenManager.saveToken(it) }
+
+                emit(Resource.Success(Unit, response.code()))
+            } else {
+                val errorResponse = runCatching { ApiUtils.parseError(response) }.getOrNull()
+                val errorMessage = when (response.code()) {
+                    400 -> if (errorResponse?.message == "Bad Request") {
+                        "Login gagal. Mohon periksa kembali."
+                    } else errorResponse?.message ?: "Permintaan tidak valid."
+
+                    500 -> "Terjadi kesalahan pada server. Silakan coba lagi nanti."
+                    else -> errorResponse?.message ?: "Login gagal. Silakan coba lagi."
                 }
 
                 emit(Resource.Error(errorMessage, response.code(), errorResponse))
