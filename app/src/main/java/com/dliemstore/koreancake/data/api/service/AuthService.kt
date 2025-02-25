@@ -14,4 +14,7 @@ interface AuthService {
 
     @POST("auth/login")
     suspend fun login(@Body loginRequest: LoginRequest): Response<SuccessResponse<TokenResponse>>
+
+    @POST("auth/refresh")
+    suspend fun refresh(): Response<SuccessResponse<TokenResponse>>
 }
