@@ -36,7 +36,7 @@ class AuthRepository @Inject constructor(
                         "Registrasi gagal. Mohon periksa kembali."
                     } else errorResponse?.message ?: "Permintaan tidak valid."
 
-                    500 -> "Terjadi kesalahan pada server. Silakan coba lagi nanti."
+                    500 -> "Terjadi kesalahan pada server"
                     else -> errorResponse?.message ?: "Registrasi gagal. Silakan coba lagi."
                 }
 
@@ -44,9 +44,9 @@ class AuthRepository @Inject constructor(
             }
         } catch (e: Exception) {
             val errorMessage = if (e is IOException) {
-                "Tidak dapat terhubung ke server. Periksa koneksi internet Anda."
+                "Tidak ada koneksi internet."
             } else {
-                "Terjadi kesalahan yang tidak terduga. Silakan coba lagi nanti."
+                "Terjadi kesalahan yang tidak terduga"
             }
             emit(Resource.Error(errorMessage))
         }
@@ -72,7 +72,9 @@ class AuthRepository @Inject constructor(
                         "Login gagal. Mohon periksa kembali."
                     } else errorResponse?.message ?: "Permintaan tidak valid."
 
-                    500 -> "Terjadi kesalahan pada server. Silakan coba lagi nanti."
+                    401 -> "Username atau password salah"
+
+                    500 -> "Terjadi kesalahan pada server"
                     else -> errorResponse?.message ?: "Login gagal. Silakan coba lagi."
                 }
 
@@ -80,9 +82,9 @@ class AuthRepository @Inject constructor(
             }
         } catch (e: Exception) {
             val errorMessage = if (e is IOException) {
-                "Tidak dapat terhubung ke server. Periksa koneksi internet Anda."
+                "Tidak ada koneksi internet."
             } else {
-                "Terjadi kesalahan yang tidak terduga. Silakan coba lagi nanti."
+                "Terjadi kesalahan yang tidak terduga"
             }
             emit(Resource.Error(errorMessage))
         }
