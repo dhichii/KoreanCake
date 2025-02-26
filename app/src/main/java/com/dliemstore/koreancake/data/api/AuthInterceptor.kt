@@ -5,14 +5,12 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
-import com.auth0.jwt.JWT
-import com.auth0.jwt.exceptions.JWTDecodeException
 import com.dliemstore.koreancake.MainActivity
 import com.dliemstore.koreancake.data.api.service.AuthService
+import com.dliemstore.koreancake.util.JWTUtils.isTokenExpired
 import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.Interceptor
 import okhttp3.Response
-import java.util.Date
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
@@ -52,15 +50,6 @@ class AuthInterceptor @Inject constructor(
         }
 
         return chain.proceed(request.build())
-    }
-
-    private fun isTokenExpired(token: String?): Boolean {
-        return try {
-            val decodedJWT = JWT.decode(token)
-            decodedJWT.expiresAt.before(Date())
-        } catch (e: JWTDecodeException) {
-            true
-        }
     }
 
     private fun refreshToken(): String? {
