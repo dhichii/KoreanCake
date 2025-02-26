@@ -9,6 +9,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.exceptions.JWTDecodeException
 import com.dliemstore.koreancake.MainActivity
 import com.dliemstore.koreancake.data.api.service.AuthService
+import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.util.Date
@@ -18,7 +19,7 @@ import javax.inject.Singleton
 
 @Singleton
 class AuthInterceptor @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val tokenManager: TokenManager,
     private val cookieStore: PersistentCookieStore,
     private val authServiceProvider: Provider<AuthService>
