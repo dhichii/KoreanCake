@@ -18,4 +18,7 @@ interface AuthService {
 
     @POST("auth/refresh")
     fun refresh(): Call<SuccessResponse<TokenResponse>>
+
+    @POST("auth/logout")
+    suspend fun logout(): Response<Unit>
 }
