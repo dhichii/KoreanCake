@@ -34,6 +34,10 @@ class PersistentCookieStore @Inject constructor(@ApplicationContext context: Con
             ?: emptyList()
     }
 
+    fun clear() {
+        sharedPreferences.edit().clear().apply()
+    }
+
     companion object {
         private const val PREF_NAME = "secure_cookie_prefs"
     }
