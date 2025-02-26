@@ -81,6 +81,12 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
+    // Token encryption
+    implementation(libs.androidx.security.crypto)
+
+    // JWT
+    implementation(libs.java.jwt)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
