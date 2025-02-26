@@ -17,13 +17,17 @@ import javax.inject.Singleton
 object ApiModule {
     @Provides
     @Singleton
-    fun provideRetrofit(webkitCookieJar: WebkitCookieJar): Retrofit {
+    fun provideRetrofit(
+        webkitCookieJar: WebkitCookieJar,
+        authInterceptor: AuthInterceptor
+    ): Retrofit {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .cookieJar(webkitCookieJar)
+            .addInterceptor(authInterceptor)
             .build()
 
         return Retrofit.Builder()
