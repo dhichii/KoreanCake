@@ -55,6 +55,7 @@ android {
 
 dependencies {
 
+    implementation(libs.coil.compose)
     implementation(libs.reorderable)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
