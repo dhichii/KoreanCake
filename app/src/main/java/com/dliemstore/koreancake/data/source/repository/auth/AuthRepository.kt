@@ -40,7 +40,7 @@ class AuthRepository @Inject constructor(
                     else -> errorResponse?.message ?: "Registrasi gagal. Silakan coba lagi."
                 }
 
-                emit(Resource.Error(errorMessage, response.code(), errorResponse))
+                emit(Resource.Error(errorMessage, response.code(), errorResponse?.errors))
             }
         } catch (e: Exception) {
             val errorMessage = if (e is IOException) {
@@ -78,7 +78,7 @@ class AuthRepository @Inject constructor(
                     else -> errorResponse?.message ?: "Login gagal. Silakan coba lagi."
                 }
 
-                emit(Resource.Error(errorMessage, response.code(), errorResponse))
+                emit(Resource.Error(errorMessage, response.code(), errorResponse?.errors))
             }
         } catch (e: Exception) {
             val errorMessage = if (e is IOException) {

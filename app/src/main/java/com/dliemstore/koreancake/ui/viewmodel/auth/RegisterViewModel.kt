@@ -86,7 +86,7 @@ class RegisterViewModel @Inject constructor(private val authRepository: AuthRepo
                         is Resource.Error -> _registerState.value.copy(
                             isLoading = false,
                             errorMessage = result.msg,
-                            errors = ApiUtils.extractApiFieldErrors(result.errorResponse?.errors)
+                            errors = ApiUtils.extractApiFieldErrors(result.errors)
                         )
                     }
                 }

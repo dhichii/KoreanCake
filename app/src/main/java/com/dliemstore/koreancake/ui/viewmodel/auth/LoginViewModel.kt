@@ -78,7 +78,7 @@ class LoginViewModel @Inject constructor(private val authRepository: AuthReposit
                             isLoading = false,
                             errorMessage = result.msg,
                             statusCode = result.code,
-                            errors = ApiUtils.extractApiFieldErrors(result.errorResponse?.errors)
+                            errors = ApiUtils.extractApiFieldErrors(result.errors)
                         )
                     }
                 }
