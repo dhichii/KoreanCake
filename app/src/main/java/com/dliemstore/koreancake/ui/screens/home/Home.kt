@@ -25,9 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.dliemstore.koreancake.ui.screens.cake.CakeList
+import com.dliemstore.koreancake.ui.screens.order.OrderList
 import com.dliemstore.koreancake.ui.theme.KoreanCakeTheme
-import com.dliemstore.koreancake.util.getAllCakeData
+import com.dliemstore.koreancake.util.getAllOrderData
 
 @Composable
 fun Home(navController: NavController) {
@@ -36,7 +36,7 @@ fun Home(navController: NavController) {
         mutableIntStateOf(0)
     }
 
-    val data = getAllCakeData(statusOptions[statusIndexState])
+    val data = getAllOrderData(statusOptions[statusIndexState])
     KoreanCakeTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -79,7 +79,7 @@ fun Home(navController: NavController) {
                         }
                     }
                 }
-                CakeList(navController, data)
+                OrderList(navController, data)
             }
         }
     }

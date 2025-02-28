@@ -1,4 +1,4 @@
-package com.dliemstore.koreancake.ui.screens.cake
+package com.dliemstore.koreancake.ui.screens.order
 
 import com.dliemstore.koreancake.util.countRemainingDay
 import com.dliemstore.koreancake.util.epochToDate

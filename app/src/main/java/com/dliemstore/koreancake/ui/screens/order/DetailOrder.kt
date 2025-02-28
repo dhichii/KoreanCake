@@ -1,4 +1,4 @@
-package com.dliemstore.koreancake.ui.screens.cake
+package com.dliemstore.koreancake.ui.screens.order
 
 import StatusTag
 import android.content.Intent
@@ -33,11 +33,11 @@ import com.dliemstore.koreancake.R
 import com.dliemstore.koreancake.ui.components.MultipleCheckBox
 import com.dliemstore.koreancake.ui.theme.KoreanCakeTheme
 import com.dliemstore.koreancake.util.formatCurrency
-import com.dliemstore.koreancake.util.getCakeData
+import com.dliemstore.koreancake.util.getOrderData
 
 @Composable
-fun DetailCake(id: String) {
-    val data = getCakeData(id)
+fun DetailOrder(id: String) {
+    val data = getOrderData(id)
     KoreanCakeTheme {
         Surface {
             val context = LocalContext.current
@@ -56,7 +56,7 @@ fun DetailCake(id: String) {
                         painter = painterResource(
                             id = data.picture,
                         ),
-                        contentDescription = "Cake",
+                        contentDescription = "Order Picture",
                         modifier = Modifier
                             .size(200.dp)
                             .padding(0.dp, 8.dp)
@@ -225,8 +225,8 @@ fun DetailCake(id: String) {
 
 @Preview(showBackground = true)
 @Composable
-fun DetailCakePreview() {
+fun DetailOrderPreview() {
     KoreanCakeTheme {
-        DetailCake("1")
+        DetailOrder("1")
     }
 }

@@ -16,29 +16,29 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.dliemstore.koreancake.ui.components.BottomAppBar
-import com.dliemstore.koreancake.ui.screens.cake.DetailCake
-import com.dliemstore.koreancake.ui.screens.cake.edit.EditCake
+import com.dliemstore.koreancake.ui.screens.order.DetailOrder
+import com.dliemstore.koreancake.ui.screens.order.edit.EditOrder
 
-enum class Screen {
-    CAKE_DETAIL,
-    CAKE_EDIT
+enum class OrderScreen {
+    ORDER_DETAIL,
+    ORDER_EDIT
 }
 
-sealed class CakeNavigationItem(val route: String) {
-    data object Detail : CakeNavigationItem(Screen.CAKE_DETAIL.name)
-    data object Edit : CakeNavigationItem(Screen.CAKE_EDIT.name)
+sealed class OrderNavigationItem(val route: String) {
+    data object Detail : OrderNavigationItem(OrderScreen.ORDER_DETAIL.name)
+    data object Edit : OrderNavigationItem(OrderScreen.ORDER_EDIT.name)
 }
 
-fun NavGraphBuilder.cakeNavigationGraph(
+fun NavGraphBuilder.orderNavigationGraph(
     navController: NavHostController,
     scaffoldViewState: MutableState<ScaffoldViewState>
 ) {
     navigation(
-        route = Graph.CAKE,
-        startDestination = "${CakeNavigationItem.Detail.route}/{id}",
+        route = Graph.ORDER,
+        startDestination = "${OrderNavigationItem.Detail.route}/{id}",
     ) {
         composable(
-            route = "${CakeNavigationItem.Detail.route}/{id}",
+            route = "${OrderNavigationItem.Detail.route}/{id}",
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Left,
@@ -66,7 +66,7 @@ fun NavGraphBuilder.cakeNavigationGraph(
                     navigationIcon = TopAppBarNavigationIcon.BACK,
                     actions = {
                         IconButton(onClick = {
-                            navController.navigate("${CakeNavigationItem.Edit.route}/$id")
+                            navController.navigate("${OrderNavigationItem.Edit.route}/$id")
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Edit,
@@ -83,12 +83,12 @@ fun NavGraphBuilder.cakeNavigationGraph(
                 )
             )
 
-            DetailCake(id)
+            DetailOrder(id)
         }
     }
 
     composable(
-        route = "${CakeNavigationItem.Edit.route}/{id}",
+        route = "${OrderNavigationItem.Edit.route}/{id}",
         enterTransition = {
             fadeIn(animationSpec = tween(500)) + slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Up, tween(500)
@@ -115,6 +115,6 @@ fun NavGraphBuilder.cakeNavigationGraph(
         )
         val id = backStackEntry.arguments?.getString("id")!!
 
-        EditCake(id)
+        EditOrder(id)
     }
 }

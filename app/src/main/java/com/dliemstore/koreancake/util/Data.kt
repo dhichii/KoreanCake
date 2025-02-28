@@ -2,7 +2,7 @@ package com.dliemstore.koreancake.util
 
 import com.dliemstore.koreancake.R
 
-data class CakeData(
+data class OrderData(
     val id: String,
     val price: Double,
     val downPayment: Double,
@@ -54,8 +54,8 @@ val progressList = listOf(
     )
 )
 
-val cakeList = listOf(
-    CakeData(
+val orderList = listOf(
+    OrderData(
         id = "1",
         price = 300000.0,
         downPayment = 100000.0,
@@ -71,7 +71,7 @@ val cakeList = listOf(
         textColor = "Putih",
         progress = progressList
     ),
-    CakeData(
+    OrderData(
         id = "2",
         price = 300000.0,
         downPayment = 100000.0,
@@ -88,7 +88,7 @@ val cakeList = listOf(
         textColor = "Putih",
         progress = progressList
     ),
-    CakeData(
+    OrderData(
         id = "3",
         price = 300000.0,
         downPayment = 100000.0,
@@ -104,7 +104,7 @@ val cakeList = listOf(
         isUseTopper = true,
         progress = progressList
     ),
-    CakeData(
+    OrderData(
         id = "4",
         price = 300000.0,
         downPayment = 100000.0,
@@ -119,7 +119,7 @@ val cakeList = listOf(
         textColor = "Putih",
         progress = progressList
     ),
-    CakeData(
+    OrderData(
         id = "5",
         price = 300000.0,
         downPayment = 100000.0,
@@ -135,7 +135,7 @@ val cakeList = listOf(
         textColor = "Putih",
         progress = progressList
     ),
-    CakeData(
+    OrderData(
         id = "6",
         price = 300000.0,
         downPayment = 100000.0,
@@ -151,7 +151,7 @@ val cakeList = listOf(
         isUseTopper = true,
         progress = progressList
     ),
-    CakeData(
+    OrderData(
         id = "7",
         price = 300000.0,
         downPayment = 100000.0,
@@ -166,7 +166,7 @@ val cakeList = listOf(
         textColor = "Putih",
         progress = progressList
     ),
-    CakeData(
+    OrderData(
         id = "8",
         price = 300000.0,
         downPayment = 100000.0,
@@ -180,7 +180,7 @@ val cakeList = listOf(
         textColor = "Putih",
         progress = progressList
     ),
-    CakeData(
+    OrderData(
         id = "9",
         price = 300000.0,
         downPayment = 100000.0,
@@ -196,7 +196,7 @@ val cakeList = listOf(
         isUseTopper = true,
         progress = progressList
     ),
-    CakeData(
+    OrderData(
         id = "10",
         price = 300000.0,
         downPayment = 100000.0,
@@ -213,16 +213,16 @@ val cakeList = listOf(
     )
 )
 
-fun getAllCakeData(status: String): List<CakeData> {
+fun getAllOrderData(status: String): List<OrderData> {
     if (status == "All") {
-        return cakeList
+        return orderList
     }
 
-    return cakeList.filter { value -> value.status == status }
+    return orderList.filter { value -> value.status == status }
 }
 
-fun getCakeData(id: String): CakeData {
-    return cakeList.find { value -> value.id == id }!!
+fun getOrderData(id: String): OrderData {
+    return orderList.find { value -> value.id == id }!!
 }
 
 data class ProcessData(val id: String, val name: String, val step: Int)

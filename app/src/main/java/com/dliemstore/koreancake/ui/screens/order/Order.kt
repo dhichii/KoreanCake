@@ -1,4 +1,4 @@
-package com.dliemstore.koreancake.ui.screens.cake
+package com.dliemstore.koreancake.ui.screens.order
 
 import StatusTag
 import androidx.compose.foundation.Image
@@ -23,12 +23,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.dliemstore.koreancake.R
-import com.dliemstore.koreancake.ui.navigation.graphs.CakeNavigationItem
-import com.dliemstore.koreancake.util.CakeData
+import com.dliemstore.koreancake.ui.navigation.graphs.OrderNavigationItem
+import com.dliemstore.koreancake.util.OrderData
 import com.dliemstore.koreancake.util.formatCurrency
 
 @Composable
-fun Cake(data: CakeData, onItemClick: (CakeData) -> Unit) {
+fun Order(data: OrderData, onItemClick: (OrderData) -> Unit) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
@@ -45,7 +45,7 @@ fun Cake(data: CakeData, onItemClick: (CakeData) -> Unit) {
                 painter = painterResource(
                     id = data.picture,
                 ),
-                contentDescription = "Cake",
+                contentDescription = "Order Picture",
                 modifier = Modifier
                     .size(120.dp)
                     .padding(end = 8.dp)
@@ -102,11 +102,11 @@ fun Cake(data: CakeData, onItemClick: (CakeData) -> Unit) {
 }
 
 @Composable
-fun CakeList(navController: NavController, data: List<CakeData>) {
+fun OrderList(navController: NavController, data: List<OrderData>) {
     LazyColumn(modifier = Modifier.padding(8.dp, 0.dp)) {
         items(data) { item ->
-            Cake(item, onItemClick = {
-                navController.navigate("${CakeNavigationItem.Detail.route}/${item.id}")
+            Order(item, onItemClick = {
+                navController.navigate("${OrderNavigationItem.Detail.route}/${item.id}")
             })
         }
     }

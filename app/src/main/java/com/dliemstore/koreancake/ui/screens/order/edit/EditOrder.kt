@@ -1,4 +1,4 @@
-package com.dliemstore.koreancake.ui.screens.cake.edit
+package com.dliemstore.koreancake.ui.screens.order.edit
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,29 +31,29 @@ import com.dliemstore.koreancake.ui.components.TextInput
 import com.dliemstore.koreancake.ui.components.pickupMinuteItems
 import com.dliemstore.koreancake.util.epochToDate
 import com.dliemstore.koreancake.util.formatTime
-import com.dliemstore.koreancake.util.getCakeData
+import com.dliemstore.koreancake.util.getOrderData
 import com.dliemstore.koreancake.util.hours
 
 @Composable
-fun EditCake(id: String) {
-    val cake = getCakeData(id)
-    val pickupTime = cake.pickupTime.epochToDate().formatTime().split(":")
+fun EditOrder(id: String) {
+    val order = getOrderData(id)
+    val pickupTime = order.pickupTime.epochToDate().formatTime().split(":")
     val hour = pickupTime[0]
     val minute = pickupTime[1]
 
-    var size by rememberSaveable { mutableStateOf(cake.size.toString()) }
-    var layer by rememberSaveable { mutableStateOf(cake.layer?.toString() ?: "") }
-    var text by rememberSaveable { mutableStateOf(cake.text) }
-    var textColor by rememberSaveable { mutableStateOf(cake.textColor) }
-    var useTopper by rememberSaveable { mutableStateOf(cake.isUseTopper) }
-    var pickupDate by rememberSaveable { mutableStateOf<Long?>(cake.pickupTime) }
+    var size by rememberSaveable { mutableStateOf(order.size.toString()) }
+    var layer by rememberSaveable { mutableStateOf(order.layer?.toString() ?: "") }
+    var text by rememberSaveable { mutableStateOf(order.text) }
+    var textColor by rememberSaveable { mutableStateOf(order.textColor) }
+    var useTopper by rememberSaveable { mutableStateOf(order.isUseTopper) }
+    var pickupDate by rememberSaveable { mutableStateOf<Long?>(order.pickupTime) }
     var pickupHour by rememberSaveable { mutableStateOf(hour) }
     var pickupMinute by rememberSaveable { mutableStateOf(minute) }
-    var telp by rememberSaveable { mutableStateOf(cake.telp) }
-    var price by rememberSaveable { mutableStateOf(cake.price.toString()) }
-    var downPayment by rememberSaveable { mutableStateOf(cake.downPayment.toString()) }
-    var remainingPayment by rememberSaveable { mutableStateOf(cake.remainingPayment.toString()) }
-    var notes by rememberSaveable { mutableStateOf(cake.notes ?: "") }
+    var telp by rememberSaveable { mutableStateOf(order.telp) }
+    var price by rememberSaveable { mutableStateOf(order.price.toString()) }
+    var downPayment by rememberSaveable { mutableStateOf(order.downPayment.toString()) }
+    var remainingPayment by rememberSaveable { mutableStateOf(order.remainingPayment.toString()) }
+    var notes by rememberSaveable { mutableStateOf(order.notes ?: "") }
 
     Surface {
         Column(
