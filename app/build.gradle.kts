@@ -69,6 +69,10 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.navigation.compose)
 
+    // Pagination
+    implementation (libs.androidx.paging.compose)
+    implementation (libs.androidx.paging.runtime)
+
     // API & Converter for JSON
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
