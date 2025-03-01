@@ -57,14 +57,20 @@ class AuthInterceptor @Inject constructor(
             val authService = authServiceProvider.get()
             val response = authService.refresh().execute()
 
-            if (!response.isSuccessful || response.body()?.data?.access == null) {
+            if (!response.isSuccessful) {
+                if (response.code() == 401) {
+                    logoutSession()
+                }
+                return null
+            }
+
+            if (response.body()?.data?.access == null) {
                 logoutSession()
                 return null
             }
 
             response.body()?.data?.access
         } catch (e: Exception) {
-            logoutSession()
             null
         }
     }
