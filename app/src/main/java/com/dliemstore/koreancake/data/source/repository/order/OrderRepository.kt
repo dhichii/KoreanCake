@@ -15,7 +15,7 @@ class OrderRepository @Inject constructor(
     private val orderService: OrderService
 ) {
     fun getOrders(status: String): Flow<PagingData<OrdersResponse>> {
-        val limit = 10
+        val limit = 20
         return Pager(
             config = PagingConfig(
                 pageSize = limit,
