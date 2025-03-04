@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -56,7 +56,7 @@ fun TopAppBarNavigationIcon(type: TopAppBarNavigationIcon, navController: NavCon
         TopAppBarNavigationIcon.BACK ->
             IconButton(onClick = { navController.popBackStack() }) {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                     contentDescription = "Back"
                 )
             }
@@ -64,7 +64,7 @@ fun TopAppBarNavigationIcon(type: TopAppBarNavigationIcon, navController: NavCon
         TopAppBarNavigationIcon.CLOSE ->
             IconButton(onClick = { navController.popBackStack() }) {
                 Icon(
-                    imageVector = Icons.Filled.Close,
+                    imageVector = Icons.Rounded.Close,
                     contentDescription = "Back"
                 )
             }

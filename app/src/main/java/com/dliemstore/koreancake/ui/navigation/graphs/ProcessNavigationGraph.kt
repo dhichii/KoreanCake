@@ -5,9 +5,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Reorder
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Reorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -56,13 +56,13 @@ fun NavGraphBuilder.processNavigationGraph(
                             navController.navigate(ProcessNavigationItem.Add.route)
                         }) {
                             Icon(
-                                imageVector = Icons.Filled.Add,
+                                imageVector = Icons.Rounded.Add,
                                 contentDescription = "Add"
                             )
                         }
                         IconButton(onClick = { isReorderEnabled = true }) {
                             Icon(
-                                imageVector = Icons.Filled.Reorder,
+                                imageVector = Icons.Rounded.Reorder,
                                 contentDescription = "Reorder"
                             )
                         }
@@ -70,7 +70,7 @@ fun NavGraphBuilder.processNavigationGraph(
                 ) else TopAppBarItem(
                     title = { Text("Urutkan") },
                     navigationIcon = TopAppBarNavigationIcon.Custom(
-                        icon = Icons.Filled.Close,
+                        icon = Icons.Rounded.Close,
                         contentDescription = "Close",
                         onClick = { isReorderEnabled = false })
                 ),

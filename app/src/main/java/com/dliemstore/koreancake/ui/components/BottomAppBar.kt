@@ -2,11 +2,6 @@ package com.dliemstore.koreancake.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Checklist
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.BottomAppBar
@@ -19,10 +14,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.dliemstore.koreancake.R
 import com.dliemstore.koreancake.ui.navigation.graphs.MainNavigationItem
 import com.dliemstore.koreancake.ui.navigation.graphs.ProcessNavigationItem
 import com.dliemstore.koreancake.ui.navigation.graphs.SettingsNavigationItem
@@ -50,7 +46,8 @@ fun BottomAppBar(type: BottomAppBar, navController: NavController) {
 data class BottomNavigationItem(
     val title: String,
     val route: String,
-    val icon: ImageVector,
+    val selectedIcon: Int,
+    val unselectedIcon: Int,
     val hasNews: Boolean,
     val badgeCount: Int? = null
 )
@@ -62,25 +59,29 @@ fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
         BottomNavigationItem(
             title = "Beranda",
-            icon = Icons.Filled.Home,
+            selectedIcon = R.drawable.home_rounded_filled_24,
+            unselectedIcon = R.drawable.home_rounded_24,
             route = MainNavigationItem.Home.route,
             hasNews = false,
         ),
         BottomNavigationItem(
             title = "Tambah",
-            icon = Icons.Filled.AddCircle,
+            selectedIcon = R.drawable.add_circle_rounded_filled_24,
+            unselectedIcon = R.drawable.add_circle_rounded_24,
             route = MainNavigationItem.Add.route,
             hasNews = false,
         ),
         BottomNavigationItem(
             title = "Proses",
-            icon = Icons.Filled.Checklist,
+            selectedIcon = R.drawable.list_alt_rounded_filled_24,
+            unselectedIcon = R.drawable.list_alt_rounded_24,
             route = ProcessNavigationItem.Main.route,
             hasNews = false,
         ),
         BottomNavigationItem(
             title = "Pengaturan",
-            icon = Icons.Filled.Settings,
+            selectedIcon = R.drawable.settings_rounded_filled_24,
+            unselectedIcon = R.drawable.settings_rounded_24,
             route = SettingsNavigationItem.Main.route,
             hasNews = false,
         ),
@@ -114,7 +115,7 @@ fun BottomNavigationBar(navController: NavController) {
                             }
                         ) {
                             Icon(
-                                imageVector = item.icon,
+                                painter = painterResource(if (selected) item.selectedIcon else item.unselectedIcon),
                                 tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
                                 contentDescription = item.title
                             )

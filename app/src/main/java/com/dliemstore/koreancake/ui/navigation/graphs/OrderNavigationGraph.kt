@@ -5,8 +5,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -69,13 +69,13 @@ fun NavGraphBuilder.orderNavigationGraph(
                             navController.navigate("${OrderNavigationItem.Edit.route}/$id")
                         }) {
                             Icon(
-                                imageVector = Icons.Filled.Edit,
+                                imageVector = Icons.Rounded.Edit,
                                 contentDescription = "Edit"
                             )
                         }
                         IconButton(onClick = {}) {
                             Icon(
-                                imageVector = Icons.Filled.Delete,
+                                imageVector = Icons.Rounded.Delete,
                                 contentDescription = "Delete"
                             )
                         }

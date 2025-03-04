@@ -5,7 +5,7 @@ import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,7 +47,7 @@ fun CustomDatePicker(
         label = { Text(label, fontSize = labelFontSize) },
         placeholder = { Text("MM/DD/YYYY", fontSize = 14.sp) },
         trailingIcon = {
-            Icon(Icons.Default.DateRange, contentDescription = "Select date")
+            Icon(Icons.Rounded.DateRange, contentDescription = "Select date")
         },
         readOnly = true,
         modifier = modifier

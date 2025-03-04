@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -99,7 +99,7 @@ fun Settings(navController: NavController) {
             ) {
                 Text(text = "Logout", color = MaterialTheme.colorScheme.error)
                 Icon(
-                    imageVector = Icons.Filled.ChevronRight,
+                    imageVector = Icons.Rounded.ChevronRight,
                     contentDescription = "navigate setting"
                 )
 
@@ -130,7 +130,7 @@ fun SettingListItem(text: String, onClick: () -> Unit) {
     ) {
         Text(text = text)
         Icon(
-            imageVector = Icons.Filled.ChevronRight,
+            imageVector = Icons.Rounded.ChevronRight,
             contentDescription = text
         )
     }

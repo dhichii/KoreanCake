@@ -3,8 +3,8 @@ package com.dliemstore.koreancake.ui.components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.rounded.Visibility
+import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -109,7 +109,8 @@ fun PasswordInput(
         },
         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
-            val img = if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+            val img =
+                if (isPasswordVisible) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff
             val description = if (isPasswordVisible) "Hide password" else "Show password"
             IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
                 Icon(imageVector = img, description)

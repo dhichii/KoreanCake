@@ -11,9 +11,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Reorder
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.Reorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -108,17 +108,17 @@ fun ProcessListItem(
             Row {
                 if (!isReorderEnabled) {
                     IconButton(onClick = onEdit) {
-                        Icon(imageVector = Icons.Filled.Edit, contentDescription = "Edit")
+                        Icon(imageVector = Icons.Rounded.Edit, contentDescription = "Edit")
                     }
                     Spacer(Modifier.width(4.dp))
                     IconButton(onClick = onDelete) {
-                        Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete")
+                        Icon(imageVector = Icons.Rounded.Delete, contentDescription = "Delete")
                     }
                 } else {
                     IconButton(
                         onClick = {},
                         modifier = with(reorderScope) { Modifier.draggableHandle() }) {
-                        Icon(imageVector = Icons.Filled.Reorder, contentDescription = "Reorder")
+                        Icon(imageVector = Icons.Rounded.Reorder, contentDescription = "Reorder")
                     }
                 }
             }
