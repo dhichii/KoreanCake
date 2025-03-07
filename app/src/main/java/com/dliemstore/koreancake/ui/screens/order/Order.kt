@@ -167,10 +167,10 @@ fun OrdersEmptyState() {
             .verticalScroll(rememberScrollState())
     ) {
         Icon(
-            painter = painterResource(R.drawable.orders_filled_24),
+            painter = painterResource(R.drawable.orders_outlined_24),
             contentDescription = "Empty State",
             tint = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier.size(120.dp)
+            modifier = Modifier.size(150.dp)
         )
         Text(text = "Belum Ada Pesanan", style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(8.dp))
