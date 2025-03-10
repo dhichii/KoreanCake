@@ -33,6 +33,6 @@ fun ErrorState(errorMessage: String?, onRetry: () -> Unit) {
             Text(text = it, style = MaterialTheme.typography.bodyMedium)
             Spacer(Modifier.height(8.dp))
         }
-        SecondaryButton("Refresh", onClick = onRetry)
+        PrimaryButton("Refresh", onClick = onRetry)
     }
 }
