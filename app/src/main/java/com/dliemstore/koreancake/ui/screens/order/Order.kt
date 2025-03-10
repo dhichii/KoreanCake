@@ -52,8 +52,8 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.dliemstore.koreancake.R
 import com.dliemstore.koreancake.data.source.remote.response.order.OrdersResponse
+import com.dliemstore.koreancake.ui.components.ErrorState
 import com.dliemstore.koreancake.ui.components.PrimaryButton
-import com.dliemstore.koreancake.ui.components.SecondaryButton
 import com.dliemstore.koreancake.ui.components.shimmerEffect
 import com.dliemstore.koreancake.ui.navigation.graphs.OrderNavigationItem
 import com.dliemstore.koreancake.ui.viewmodel.order.OrdersViewModel
@@ -115,14 +115,14 @@ fun OrderList(
             isRefreshing.value = true
             orders.refresh()
         }) {
-        when (orders.loadState.refresh) {
+        when (val refreshState = orders.loadState.refresh) {
             is LoadState.Loading -> if (orders.itemCount == 0) OrdersLoadingState()
             is LoadState.NotLoading -> {
                 if (orders.itemCount == 0) OrdersEmptyState()
                 else OrderListContent(orders, navController, listState)
             }
 
-            is LoadState.Error -> OrdersErrorState { orders.retry() }
+            is LoadState.Error -> ErrorState(refreshState.error.message) { orders.retry() }
         }
     }
 }
@@ -176,25 +176,6 @@ fun OrdersEmptyState() {
         Text(text = "Belum Ada Pesanan", style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = "Coba tambahkan beberapa pesanan!", style = MaterialTheme.typography.bodyMedium)
-    }
-}
-
-@Composable
-fun OrdersErrorState(onRetry: () -> Unit) {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Text(
-            text = "Gagal memuat lebih banyak",
-            fontSize = 14.sp,
-            modifier = Modifier
-                .fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
-        Spacer(Modifier.height(12.dp))
-        SecondaryButton("Refresh", onClick = onRetry)
     }
 }
 
