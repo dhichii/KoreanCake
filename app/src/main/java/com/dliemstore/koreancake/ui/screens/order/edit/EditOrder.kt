@@ -109,7 +109,7 @@ fun EditOrder(id: String) {
                     label = "Warna Tulisan"
                 )
                 CustomCheckBox(
-                    value = useTopper,
+                    isChecked = useTopper,
                     onClicked = { useTopper = it },
                     label = "Pakai Topper"
                 )
