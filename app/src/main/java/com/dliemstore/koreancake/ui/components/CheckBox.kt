@@ -21,26 +21,24 @@ import androidx.compose.ui.unit.sp
 import com.dliemstore.koreancake.util.Progress
 
 @Composable
-fun CustomCheckBox(value: Boolean, label: String, onClicked: (Boolean) -> Unit) {
-    var checkState by remember {
-        mutableStateOf(value)
-    }
+fun CustomCheckBox(
+    isChecked: Boolean,
+    label: String,
+    onClicked: (Boolean) -> Unit
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .height(32.dp)
             .selectable(
-                selected = checkState,
-                onClick = {
-                    checkState = !checkState
-                    onClicked(checkState)
-                },
+                selected = isChecked,
+                onClick = { onClicked(!isChecked) },
                 role = Role.Checkbox
             )
     ) {
         Checkbox(
-            checked = checkState,
+            checked = isChecked,
             onCheckedChange = null,
             modifier = Modifier.padding(end = 8.dp)
         )

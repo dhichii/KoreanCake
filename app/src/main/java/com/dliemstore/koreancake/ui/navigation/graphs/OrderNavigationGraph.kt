@@ -16,7 +16,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.dliemstore.koreancake.ui.components.BottomAppBar
-import com.dliemstore.koreancake.ui.screens.order.DetailOrder
+import com.dliemstore.koreancake.ui.screens.order.OrderDetail
 import com.dliemstore.koreancake.ui.screens.order.edit.EditOrder
 
 enum class OrderScreen {
@@ -83,7 +83,7 @@ fun NavGraphBuilder.orderNavigationGraph(
                 )
             )
 
-            DetailOrder(id)
+            OrderDetail(id)
         }
     }
 
