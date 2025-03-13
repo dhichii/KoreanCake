@@ -7,6 +7,7 @@ import com.dliemstore.koreancake.data.source.remote.response.order.OrderDetailRe
 import com.dliemstore.koreancake.data.source.remote.response.order.OrdersResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -22,6 +23,9 @@ interface OrderService {
 
     @GET("orders/{id}")
     suspend fun getById(@Path("id") id: String): Response<SuccessResponse<OrderDetailResponse>>
+
+    @DELETE("orders/{id}")
+    suspend fun deleteById(@Path("id") id: String): Response<Unit>
 
     @PUT("orders/{id}/progresses/{progressId}")
     suspend fun updateOrderProgress(
