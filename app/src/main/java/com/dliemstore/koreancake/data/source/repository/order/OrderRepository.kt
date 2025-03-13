@@ -62,6 +62,32 @@ class OrderRepository @Inject constructor(
         }
     }.flowOn(Dispatchers.IO)
 
+    fun deleteOrder(id: String) = flow {
+        emit(Resource.Loading())
+
+        try {
+            val response = orderService.deleteById(id)
+            if (response.isSuccessful) {
+                emit(Resource.Success(Unit, response.code()))
+            } else {
+                val errorResponse = runCatching { ApiUtils.parseError(response) }.getOrNull()
+                val errorMessage = when (response.code()) {
+                    500 -> "Terjadi kesalahan pada server"
+                    else -> errorResponse?.message ?: "Permintaan tidak valid."
+                }
+
+                emit(Resource.Error(errorMessage, response.code(), errorResponse?.errors))
+            }
+        } catch (e: Exception) {
+            val errorMessage = if (e is IOException) {
+                "Tidak ada koneksi internet."
+            } else {
+                "Terjadi kesalahan yang tidak terduga"
+            }
+            emit(Resource.Error(errorMessage))
+        }
+    }.flowOn(Dispatchers.IO)
+
     fun updateOrderProgress(orderId: String, progressId: String, isFinish: Boolean) = flow {
         emit(Resource.Loading())
 
