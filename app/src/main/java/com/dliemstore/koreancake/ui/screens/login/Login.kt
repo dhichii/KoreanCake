@@ -12,6 +12,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,12 +29,19 @@ import com.dliemstore.koreancake.ui.components.SecondaryButton
 import com.dliemstore.koreancake.ui.components.TextInput
 import com.dliemstore.koreancake.ui.navigation.graphs.AuthNavigationItem
 import com.dliemstore.koreancake.ui.navigation.graphs.Graph
+import com.dliemstore.koreancake.ui.navigation.graphs.ScaffoldViewState
 import com.dliemstore.koreancake.ui.viewmodel.auth.LoginViewModel
 
 @Composable
-fun Login(navController: NavController, viewModel: LoginViewModel = hiltViewModel()) {
+fun Login(
+    navController: NavController,
+    scaffoldViewState: MutableState<ScaffoldViewState>,
+    viewModel: LoginViewModel = hiltViewModel()
+) {
     val loginState by viewModel.loginState.collectAsState()
     val context = LocalContext.current
+
+    LaunchedEffect(Unit) { scaffoldViewState.value = ScaffoldViewState() }
 
     LaunchedEffect(loginState.isSuccess) {
         if (loginState.isSuccess) {

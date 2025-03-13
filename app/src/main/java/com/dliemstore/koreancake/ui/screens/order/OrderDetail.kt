@@ -25,6 +25,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ContentCopy
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,6 +36,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,6 +58,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
@@ -66,6 +70,10 @@ import com.dliemstore.koreancake.data.source.remote.response.order.ProgressesIte
 import com.dliemstore.koreancake.ui.components.CustomCheckBox
 import com.dliemstore.koreancake.ui.components.ErrorState
 import com.dliemstore.koreancake.ui.components.shimmerEffect
+import com.dliemstore.koreancake.ui.navigation.graphs.OrderNavigationItem
+import com.dliemstore.koreancake.ui.navigation.graphs.ScaffoldViewState
+import com.dliemstore.koreancake.ui.navigation.graphs.TopAppBarItem
+import com.dliemstore.koreancake.ui.navigation.graphs.TopAppBarNavigationIcon
 import com.dliemstore.koreancake.ui.viewmodel.order.OrderDetailViewModel
 import com.dliemstore.koreancake.util.Resource
 import com.dliemstore.koreancake.util.ToastUtils
@@ -73,14 +81,24 @@ import com.dliemstore.koreancake.util.formatCurrency
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OrderDetail(id: String, viewModel: OrderDetailViewModel = hiltViewModel()) {
+fun OrderDetail(
+    id: String,
+    navController: NavController,
+    scaffoldViewState: MutableState<ScaffoldViewState>,
+    viewModel: OrderDetailViewModel = hiltViewModel()
+) {
     val orderState by viewModel.orderDetailState.collectAsState()
     val progressState by viewModel.updateProgressState.collectAsState()
     val context = LocalContext.current
     val isRefreshing = remember { mutableStateOf(false) }
     val pullToRefreshState = rememberPullToRefreshState()
 
-    LaunchedEffect(id) {
+    LaunchedEffect(Unit) {
+        setupScaffold(
+            scaffoldViewState = scaffoldViewState,
+            onEdit = { navController.navigate("${OrderNavigationItem.Edit.route}/$id") },
+            onDelete = {}
+        )
         viewModel.fetchOrderDetail(id)
     }
 
@@ -115,6 +133,27 @@ fun OrderDetail(id: String, viewModel: OrderDetailViewModel = hiltViewModel()) {
 
         is Resource.Error -> ErrorState(orderState.msg) { viewModel.fetchOrderDetail(id) }
     }
+}
+
+private fun setupScaffold(
+    scaffoldViewState: MutableState<ScaffoldViewState>,
+    onEdit: () -> Unit,
+    onDelete: () -> Unit
+) {
+    scaffoldViewState.value = ScaffoldViewState(
+        topAppBar = TopAppBarItem(
+            title = { Text("Detail") },
+            navigationIcon = TopAppBarNavigationIcon.BACK,
+            actions = {
+                IconButton(onClick = onEdit) {
+                    Icon(imageVector = Icons.Rounded.Edit, contentDescription = "Edit")
+                }
+                IconButton(onClick = onDelete) {
+                    Icon(imageVector = Icons.Rounded.Delete, contentDescription = "Delete")
+                }
+            }
+        )
+    )
 }
 
 @Composable

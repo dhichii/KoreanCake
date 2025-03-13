@@ -15,6 +15,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -25,15 +27,30 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.dliemstore.koreancake.ui.components.PasswordInput
 import com.dliemstore.koreancake.ui.components.PrimaryButton
+import com.dliemstore.koreancake.ui.navigation.graphs.ScaffoldViewState
+import com.dliemstore.koreancake.ui.navigation.graphs.TopAppBarItem
+import com.dliemstore.koreancake.ui.navigation.graphs.TopAppBarNavigationIcon
 
 @Composable
-fun ChangePassword(navController: NavController) {
+fun ChangePassword(
+    navController: NavController,
+    scaffoldViewState: MutableState<ScaffoldViewState>
+) {
     var password by rememberSaveable { mutableStateOf("") }
     var confirmPassword by rememberSaveable { mutableStateOf("") }
 
     val hasMinimum: Boolean = password.matches(Regex(".{8,}"))
     val isMatched: Boolean = confirmPassword == password
     var isConfirmPasswordChanged by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        scaffoldViewState.value = ScaffoldViewState(
+            TopAppBarItem(
+                title = { Text("Password") },
+                navigationIcon = TopAppBarNavigationIcon.CLOSE
+            )
+        )
+    }
 
     Column(modifier = Modifier.padding(horizontal = 12.dp)) {
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {

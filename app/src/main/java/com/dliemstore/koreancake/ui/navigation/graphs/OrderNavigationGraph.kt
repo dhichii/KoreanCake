@@ -4,18 +4,11 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.MutableState
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.dliemstore.koreancake.ui.components.BottomAppBar
 import com.dliemstore.koreancake.ui.screens.order.OrderDetail
 import com.dliemstore.koreancake.ui.screens.order.edit.EditOrder
 
@@ -59,31 +52,7 @@ fun NavGraphBuilder.orderNavigationGraph(
             }
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getString("id")!!
-
-            scaffoldViewState.value = ScaffoldViewState(
-                topAppBar = TopAppBarItem(
-                    title = { Text("Detail") },
-                    navigationIcon = TopAppBarNavigationIcon.BACK,
-                    actions = {
-                        IconButton(onClick = {
-                            navController.navigate("${OrderNavigationItem.Edit.route}/$id")
-                        }) {
-                            Icon(
-                                imageVector = Icons.Rounded.Edit,
-                                contentDescription = "Edit"
-                            )
-                        }
-                        IconButton(onClick = {}) {
-                            Icon(
-                                imageVector = Icons.Rounded.Delete,
-                                contentDescription = "Delete"
-                            )
-                        }
-                    }
-                )
-            )
-
-            OrderDetail(id)
+            OrderDetail(id, navController, scaffoldViewState)
         }
     }
 
@@ -106,15 +75,7 @@ fun NavGraphBuilder.orderNavigationGraph(
             )
         }
     ) { backStackEntry ->
-        scaffoldViewState.value = ScaffoldViewState(
-            topAppBar = TopAppBarItem(
-                title = { Text("Edit") },
-                navigationIcon = TopAppBarNavigationIcon.CLOSE
-            ),
-            bottomAppBar = BottomAppBar.Save(onClick = {})
-        )
         val id = backStackEntry.arguments?.getString("id")!!
-
-        EditOrder(id)
+        EditOrder(id, scaffoldViewState)
     }
 }

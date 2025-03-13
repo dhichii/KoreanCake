@@ -1,12 +1,10 @@
 package com.dliemstore.koreancake.ui.navigation.graphs
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.MutableState
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.dliemstore.koreancake.ui.components.BottomAppBar
 import com.dliemstore.koreancake.ui.screens.settings.ChangePassword
 import com.dliemstore.koreancake.ui.screens.settings.Settings
 import com.dliemstore.koreancake.ui.screens.settings.SettingsForm
@@ -50,51 +48,23 @@ fun NavGraphBuilder.settingsNavigationGraph(
         startDestination = SettingsNavigationItem.Main.route,
     ) {
         composable(route = SettingsNavigationItem.Main.route) {
-            scaffoldViewState.value = ScaffoldViewState(
-                topAppBar = TopAppBarItem(title = { Text("Settings") }),
-                bottomAppBar = BottomAppBar.Navigation
-            )
-            Settings(navController)
+            Settings(navController, scaffoldViewState)
         }
 
         composable(route = SettingsNavigationItem.Profile.route) {
-            scaffoldViewState.value = ScaffoldViewState(
-                TopAppBarItem(
-                    title = { Text("Profil") },
-                    navigationIcon = TopAppBarNavigationIcon.CLOSE
-                )
-            )
-            SettingsForm(SettingType.Profile, navController)
+            SettingsForm(SettingType.Profile, navController, scaffoldViewState, "Profil")
         }
 
         composable(route = SettingsNavigationItem.Email.route) {
-            scaffoldViewState.value = ScaffoldViewState(
-                TopAppBarItem(
-                    title = { Text("Email") },
-                    navigationIcon = TopAppBarNavigationIcon.CLOSE
-                )
-            )
-            SettingsForm(SettingType.Email, navController)
+            SettingsForm(SettingType.Email, navController, scaffoldViewState, "Email")
         }
 
         composable(route = SettingsNavigationItem.Username.route) {
-            scaffoldViewState.value = ScaffoldViewState(
-                TopAppBarItem(
-                    title = { Text("Username") },
-                    navigationIcon = TopAppBarNavigationIcon.CLOSE
-                )
-            )
-            SettingsForm(SettingType.Username, navController)
+            SettingsForm(SettingType.Username, navController, scaffoldViewState, "Username")
         }
 
         composable(route = SettingsNavigationItem.Password.route) {
-            scaffoldViewState.value = ScaffoldViewState(
-                TopAppBarItem(
-                    title = { Text("Password") },
-                    navigationIcon = TopAppBarNavigationIcon.CLOSE
-                )
-            )
-            ChangePassword(navController)
+            ChangePassword(navController, scaffoldViewState)
         }
     }
 }

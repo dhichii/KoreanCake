@@ -11,6 +11,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -27,16 +28,23 @@ import com.dliemstore.koreancake.ui.components.PrimaryButton
 import com.dliemstore.koreancake.ui.components.SecondaryButton
 import com.dliemstore.koreancake.ui.components.TextInput
 import com.dliemstore.koreancake.ui.navigation.graphs.AuthNavigationItem
+import com.dliemstore.koreancake.ui.navigation.graphs.ScaffoldViewState
 import com.dliemstore.koreancake.ui.viewmodel.auth.RegisterViewModel
 
 @Composable
-fun Register(navController: NavController, viewModel: RegisterViewModel = hiltViewModel()) {
+fun Register(
+    navController: NavController,
+    scaffoldViewState: MutableState<ScaffoldViewState>,
+    viewModel: RegisterViewModel = hiltViewModel()
+) {
     val registerState by viewModel.registerState.collectAsState()
     val context = LocalContext.current
     val isPrimaryButtonEnabled =
         registerState.name.isNotBlank() && registerState.email.isNotBlank() &&
                 registerState.username.isNotBlank() && registerState.password.isNotBlank() &&
                 registerState.confirmPassword.isNotBlank()
+
+    LaunchedEffect(Unit) { scaffoldViewState.value = ScaffoldViewState() }
 
     LaunchedEffect(registerState.isSuccess) {
         if (registerState.isSuccess) {

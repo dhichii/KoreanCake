@@ -11,6 +11,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -22,6 +24,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dliemstore.koreancake.R
+import com.dliemstore.koreancake.ui.components.BottomAppBar
 import com.dliemstore.koreancake.ui.components.CustomCheckBox
 import com.dliemstore.koreancake.ui.components.CustomDatePicker
 import com.dliemstore.koreancake.ui.components.PickupTimeInput
@@ -29,13 +32,16 @@ import com.dliemstore.koreancake.ui.components.SecondaryButton
 import com.dliemstore.koreancake.ui.components.TelpInput
 import com.dliemstore.koreancake.ui.components.TextInput
 import com.dliemstore.koreancake.ui.components.pickupMinuteItems
+import com.dliemstore.koreancake.ui.navigation.graphs.ScaffoldViewState
+import com.dliemstore.koreancake.ui.navigation.graphs.TopAppBarItem
+import com.dliemstore.koreancake.ui.navigation.graphs.TopAppBarNavigationIcon
 import com.dliemstore.koreancake.util.epochToDate
 import com.dliemstore.koreancake.util.formatTime
 import com.dliemstore.koreancake.util.getOrderData
 import com.dliemstore.koreancake.util.hours
 
 @Composable
-fun EditOrder(id: String) {
+fun EditOrder(id: String, scaffoldViewState: MutableState<ScaffoldViewState>) {
     val order = getOrderData(id)
     val pickupTime = order.pickupTime.epochToDate().formatTime().split(":")
     val hour = pickupTime[0]
@@ -54,6 +60,16 @@ fun EditOrder(id: String) {
     var downPayment by rememberSaveable { mutableStateOf(order.downPayment.toString()) }
     var remainingPayment by rememberSaveable { mutableStateOf(order.remainingPayment.toString()) }
     var notes by rememberSaveable { mutableStateOf(order.notes ?: "") }
+
+    LaunchedEffect(Unit) {
+        scaffoldViewState.value = ScaffoldViewState(
+            topAppBar = TopAppBarItem(
+                title = { Text("Edit") },
+                navigationIcon = TopAppBarNavigationIcon.CLOSE
+            ),
+            bottomAppBar = BottomAppBar.Save(onClick = {})
+        )
+    }
 
     Surface {
         Column(

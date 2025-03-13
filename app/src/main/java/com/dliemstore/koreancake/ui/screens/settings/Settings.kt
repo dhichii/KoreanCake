@@ -16,6 +16,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,20 +28,33 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.dliemstore.koreancake.ui.components.BottomAppBar
 import com.dliemstore.koreancake.ui.components.LogoutDialog
 import com.dliemstore.koreancake.ui.navigation.graphs.Graph
+import com.dliemstore.koreancake.ui.navigation.graphs.ScaffoldViewState
 import com.dliemstore.koreancake.ui.navigation.graphs.SettingsNavigationItem
+import com.dliemstore.koreancake.ui.navigation.graphs.TopAppBarItem
 
 data class SettingsItem(val text: String, val route: String)
 
 @Composable
-fun Settings(navController: NavController) {
+fun Settings(
+    navController: NavController,
+    scaffoldViewState: MutableState<ScaffoldViewState>
+) {
     val settingsOptions = listOf(
         SettingsItem("Ubah Profil", SettingsNavigationItem.Profile.route),
         SettingsItem("Ubah Email", SettingsNavigationItem.Email.route),
         SettingsItem("Ubah Username", SettingsNavigationItem.Username.route),
         SettingsItem("Ubah Password", SettingsNavigationItem.Password.route)
     )
+
+    LaunchedEffect(Unit) {
+        scaffoldViewState.value = ScaffoldViewState(
+            topAppBar = TopAppBarItem(title = { Text("Settings") }),
+            bottomAppBar = BottomAppBar.Navigation
+        )
+    }
 
     Column {
         // profile

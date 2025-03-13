@@ -4,13 +4,11 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.material3.Text
 import androidx.compose.runtime.MutableState
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.dliemstore.koreancake.ui.components.BottomAppBar
 import com.dliemstore.koreancake.ui.screens.add.Add
 import com.dliemstore.koreancake.ui.screens.home.Home
 
@@ -33,11 +31,7 @@ fun NavGraphBuilder.mainNavigationGraph(
         startDestination = MainNavigationItem.Home.route
     ) {
         composable(MainNavigationItem.Home.route) {
-            scaffoldViewState.value = ScaffoldViewState(
-                topAppBar = TopAppBarItem(),
-                bottomAppBar = BottomAppBar.Navigation
-            )
-            Home(navController)
+            Home(navController, scaffoldViewState)
         }
 
         composable(
@@ -59,13 +53,7 @@ fun NavGraphBuilder.mainNavigationGraph(
                 )
             }
         ) {
-            scaffoldViewState.value = ScaffoldViewState(
-                topAppBar = TopAppBarItem(
-                    title = { Text("Tambah Order") },
-                    navigationIcon = TopAppBarNavigationIcon.CLOSE
-                )
-            )
-            Add()
+            Add(navController, scaffoldViewState)
         }
     }
 }
