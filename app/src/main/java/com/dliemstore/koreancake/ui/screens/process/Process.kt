@@ -126,6 +126,7 @@ fun Process(
 
     if (isShowDeleteDialog) {
         DeleteDialog(
+            isLoading = false,
             onDismiss = { isShowDeleteDialog = false },
             onConfirmation = {
                 isShowDeleteDialog = false

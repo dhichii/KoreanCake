@@ -120,6 +120,7 @@ fun Settings(
 
                 if (isShowLogoutDialog) {
                     LogoutDialog(
+                        isLoading = false,
                         onDismiss = { isShowLogoutDialog = false },
                         onConfirmation = {
                             isShowLogoutDialog = false
