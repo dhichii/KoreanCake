@@ -68,8 +68,11 @@ import com.dliemstore.koreancake.data.source.remote.response.order.OrderDetailRe
 import com.dliemstore.koreancake.data.source.remote.response.order.PicturesItem
 import com.dliemstore.koreancake.data.source.remote.response.order.ProgressesItem
 import com.dliemstore.koreancake.ui.components.CustomCheckBox
+import com.dliemstore.koreancake.ui.components.DeleteDialog
 import com.dliemstore.koreancake.ui.components.ErrorState
 import com.dliemstore.koreancake.ui.components.shimmerEffect
+import com.dliemstore.koreancake.ui.navigation.graphs.Graph
+import com.dliemstore.koreancake.ui.navigation.graphs.MainNavigationItem
 import com.dliemstore.koreancake.ui.navigation.graphs.OrderNavigationItem
 import com.dliemstore.koreancake.ui.navigation.graphs.ScaffoldViewState
 import com.dliemstore.koreancake.ui.navigation.graphs.TopAppBarItem
@@ -87,34 +90,35 @@ fun OrderDetail(
     scaffoldViewState: MutableState<ScaffoldViewState>,
     viewModel: OrderDetailViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val orderState by viewModel.orderDetailState.collectAsState()
     val progressState by viewModel.updateProgressState.collectAsState()
-    val context = LocalContext.current
+    val deleteOrderState by viewModel.deleteOrderState.collectAsState()
+
     val isRefreshing = remember { mutableStateOf(false) }
+    val isShowDeleteDialog = remember { mutableStateOf(false) }
+    val isDeletionLoading = remember { mutableStateOf(false) }
     val pullToRefreshState = rememberPullToRefreshState()
 
     LaunchedEffect(Unit) {
         setupScaffold(
             scaffoldViewState = scaffoldViewState,
             onEdit = { navController.navigate("${OrderNavigationItem.Edit.route}/$id") },
-            onDelete = {}
+            onDelete = { isShowDeleteDialog.value = true }
         )
         viewModel.fetchOrderDetail(id)
     }
 
-    LaunchedEffect(orderState) {
-        isRefreshing.value = false
-        if (orderState is Resource.Error) {
-            ToastUtils.show(context, orderState.msg ?: "Gagal mengambil data")
-        }
-
-    }
-
-    LaunchedEffect(progressState) {
-        if (progressState is Resource.Error) {
-            ToastUtils.show(context, progressState.msg ?: "Gagal mengubah data")
-        }
-    }
+    HandleStates(
+        context = context,
+        orderState = orderState,
+        progressState = progressState,
+        deleteOrderState = deleteOrderState,
+        isRefreshing = isRefreshing,
+        isShowDeleteDialog = isShowDeleteDialog,
+        isDeletionLoading = isDeletionLoading,
+        navController = navController
+    )
 
     when (orderState) {
         is Resource.Loading -> OrderDetailShimmer()
@@ -132,6 +136,17 @@ fun OrderDetail(
         }
 
         is Resource.Error -> ErrorState(orderState.msg) { viewModel.fetchOrderDetail(id) }
+    }
+
+    if (isShowDeleteDialog.value) {
+        DeleteDialog(
+            isLoading = isDeletionLoading.value,
+            onDismiss = { isShowDeleteDialog.value = false },
+            onConfirmation = {
+                isDeletionLoading.value = true
+                viewModel.deleteOrder(id)
+            }
+        )
     }
 }
 
@@ -154,6 +169,52 @@ private fun setupScaffold(
             }
         )
     )
+}
+
+@Composable
+private fun HandleStates(
+    context: Context,
+    orderState: Resource<OrderDetailResponse>,
+    deleteOrderState: Resource<Unit>,
+    progressState: Resource<Unit>,
+    isRefreshing: MutableState<Boolean>,
+    isShowDeleteDialog: MutableState<Boolean>,
+    isDeletionLoading: MutableState<Boolean>,
+    navController: NavController
+) {
+    LaunchedEffect(orderState) {
+        isRefreshing.value = false
+        if (orderState is Resource.Error) {
+            ToastUtils.show(context, orderState.msg ?: "Gagal mengambil data")
+        }
+    }
+
+    LaunchedEffect(deleteOrderState) {
+        when (deleteOrderState) {
+            is Resource.Loading -> {}
+            is Resource.Error -> {
+                isDeletionLoading.value = false
+                isShowDeleteDialog.value = false
+                ToastUtils.show(context, deleteOrderState.msg ?: "Gagal menghapus order")
+            }
+
+            is Resource.Success -> {
+                isDeletionLoading.value = false
+                isShowDeleteDialog.value = false
+                ToastUtils.show(context, "Order berhasil dihapus")
+                navController.navigate(MainNavigationItem.Home.route) {
+                    popUpTo(Graph.ORDER) { inclusive = true }
+                    launchSingleTop = true
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(progressState) {
+        if (progressState is Resource.Error) {
+            ToastUtils.show(context, progressState.msg ?: "Gagal mengubah data")
+        }
+    }
 }
 
 @Composable
