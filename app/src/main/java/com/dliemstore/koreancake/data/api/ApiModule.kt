@@ -2,6 +2,7 @@ package com.dliemstore.koreancake.data.api
 
 import com.dliemstore.koreancake.data.api.service.AuthService
 import com.dliemstore.koreancake.data.api.service.OrderService
+import com.dliemstore.koreancake.data.api.service.ProcessService
 import com.dliemstore.koreancake.util.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -47,4 +48,9 @@ object ApiModule {
     @Singleton
     fun provideOrderService(retrofit: Retrofit): OrderService =
         retrofit.create(OrderService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideProcessService(retrofit: Retrofit): ProcessService =
+        retrofit.create(ProcessService::class.java)
 }
