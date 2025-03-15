@@ -1,13 +1,18 @@
 package com.dliemstore.koreancake.ui.screens.process
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -18,126 +23,312 @@ import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Reorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.dliemstore.koreancake.R
+import com.dliemstore.koreancake.data.source.remote.response.process.ProcessResponse
 import com.dliemstore.koreancake.ui.components.BottomAppBar
 import com.dliemstore.koreancake.ui.components.DeleteDialog
+import com.dliemstore.koreancake.ui.components.EmptyState
+import com.dliemstore.koreancake.ui.components.ErrorState
+import com.dliemstore.koreancake.ui.components.LoadingDialog
+import com.dliemstore.koreancake.ui.components.shimmerEffect
 import com.dliemstore.koreancake.ui.navigation.graphs.ProcessNavigationItem
 import com.dliemstore.koreancake.ui.navigation.graphs.ScaffoldViewState
 import com.dliemstore.koreancake.ui.navigation.graphs.TopAppBarItem
 import com.dliemstore.koreancake.ui.navigation.graphs.TopAppBarNavigationIcon
-import com.dliemstore.koreancake.util.ProcessData
-import com.dliemstore.koreancake.util.getAllProcesses
+import com.dliemstore.koreancake.ui.viewmodel.process.ProcessViewModel
+import com.dliemstore.koreancake.util.Resource
+import com.dliemstore.koreancake.util.ToastUtils
 import sh.calvin.reorderable.ReorderableCollectionItemScope
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Process(
     navController: NavController,
-    scaffoldViewState: MutableState<ScaffoldViewState>
+    scaffoldViewState: MutableState<ScaffoldViewState>,
+    viewModel: ProcessViewModel = hiltViewModel()
 ) {
-    var data by remember { mutableStateOf(getAllProcesses()) }
+    val context = LocalContext.current
     val lazyListState = rememberLazyListState()
-    var isReorderEnabled by remember { mutableStateOf(false) }
-    val reorderableLazyColumnState = rememberReorderableLazyListState(lazyListState) { from, to ->
-        data = data.toMutableList().apply {
-            add(to.index, removeAt(from.index))
-            forEachIndexed { index, item ->
-                set(index, item.copy(step = index + 1))
+    val pullToRefreshState = rememberPullToRefreshState()
+
+    val processesState by viewModel.processesState.collectAsState()
+    val deleteProcessState by viewModel.deleteProcessState.collectAsState()
+    val reorderProcessState by viewModel.reorderProcessesState.collectAsState()
+
+    val isRefreshing = remember { mutableStateOf(false) }
+    val isShowDeleteDialog = remember { mutableStateOf(false) }
+    val isDeleting = remember { mutableStateOf(false) }
+    val selectedProcessId = remember { mutableStateOf<String?>(null) }
+
+    val isCanReorder = remember { derivedStateOf { (processesState.data?.size ?: 0) > 1 } }
+    val isReorderEnabled = remember { mutableStateOf(false) }
+    val isReordering = remember { mutableStateOf(false) }
+
+    LaunchedEffect(isReorderEnabled.value) {
+        setupScaffold(
+            scaffoldViewState = scaffoldViewState,
+            isCanReorder = isCanReorder,
+            isReorderEnabled = isReorderEnabled,
+            onAdd = { navController.navigate(ProcessNavigationItem.Add.route) },
+            onCancel = {
+                isReorderEnabled.value = false
+                viewModel.cancelReorderProcess()
+            },
+            onReorder = {
+                isReordering.value = true
+                viewModel.saveReorderedProcess()
             }
+        )
+    }
+
+    LaunchedEffect(Unit) { viewModel.fetchProcesses() }
+
+    HandleStates(
+        context = context,
+        processesState = processesState,
+        deleteProcessState = deleteProcessState,
+        reorderProcessState = reorderProcessState,
+        isRefreshing = isRefreshing,
+        isShowDeleteDialog = isShowDeleteDialog,
+        isDeleting = isDeleting,
+        isReorderEnabled = isReorderEnabled,
+        isReordering = isReordering
+    )
+
+    PullToRefreshBox(
+        modifier = Modifier.fillMaxSize(),
+        isRefreshing = isRefreshing.value,
+        state = pullToRefreshState,
+        onRefresh = {
+            isRefreshing.value = true
+            viewModel.fetchProcesses()
+        }) {
+        when (processesState) {
+            is Resource.Loading -> ProcessLoadingState()
+            is Resource.Success -> processesState.data?.takeIf { it.isNotEmpty() }
+                ?.let { processes ->
+                    ProcessList(
+                        processes = processes,
+                        navController = navController,
+                        lazyListState = lazyListState,
+                        isReorderEnabled = isReorderEnabled.value,
+                        selectedProcessId = selectedProcessId,
+                        isShowDeleteDialog = isShowDeleteDialog,
+                        onReordering = viewModel::reorderProcess
+                    )
+                }
+                ?: EmptyState(
+                    icon = R.drawable.assignment_add_rounded_24,
+                    title = "Belum Ada Proses",
+                    body = "Coba tambahkan beberapa proses!"
+                )
+
+            is Resource.Error -> ErrorState(processesState.msg) { viewModel.fetchProcesses() }
         }
     }
 
-    var isShowDeleteDialog by remember { mutableStateOf(false) }
+    if (isShowDeleteDialog.value) {
+        DeleteDialog(
+            isLoading = isDeleting.value,
+            onDismiss = { isShowDeleteDialog.value = false },
+            onConfirmation = {
+                isDeleting.value = true
+                selectedProcessId.value?.let { viewModel.deleteProcess(it) }
+            }
+        )
+    }
 
-    LaunchedEffect(isReorderEnabled) {
-        scaffoldViewState.value = ScaffoldViewState(
-            topAppBar = if (!isReorderEnabled) TopAppBarItem(
-                title = { Text("Proses Pembuatan") },
-                actions = {
-                    IconButton(onClick = {
-                        navController.navigate(ProcessNavigationItem.Add.route)
-                    }) {
-                        Icon(
-                            imageVector = Icons.Rounded.Add,
-                            contentDescription = "Add"
-                        )
-                    }
-                    IconButton(onClick = { isReorderEnabled = true }) {
+    if (isReordering.value) LoadingDialog()
+}
+
+private fun setupScaffold(
+    scaffoldViewState: MutableState<ScaffoldViewState>,
+    isCanReorder: State<Boolean>,
+    isReorderEnabled: MutableState<Boolean>,
+    onAdd: () -> Unit,
+    onCancel: () -> Unit,
+    onReorder: () -> Unit
+) {
+    scaffoldViewState.value = ScaffoldViewState(
+        topAppBar = if (!isReorderEnabled.value) TopAppBarItem(
+            title = { Text("Proses Pembuatan") },
+            actions = {
+                IconButton(onClick = onAdd) {
+                    Icon(
+                        imageVector = Icons.Rounded.Add,
+                        contentDescription = "Add"
+                    )
+                }
+
+                if (isCanReorder.value) {
+                    IconButton(onClick = { isReorderEnabled.value = true }) {
                         Icon(
                             imageVector = Icons.Rounded.Reorder,
                             contentDescription = "Reorder"
                         )
                     }
                 }
-            ) else TopAppBarItem(
-                title = { Text("Urutkan") },
-                navigationIcon = TopAppBarNavigationIcon.Custom(
-                    icon = Icons.Rounded.Close,
-                    contentDescription = "Close",
-                    onClick = {
-                        isReorderEnabled = false
-                    })
-            ),
-            bottomAppBar =
-            if (!isReorderEnabled) {
-                BottomAppBar.Navigation
-            } else {
-                BottomAppBar.Save(onClick = {
-                    isReorderEnabled = false
-                })
-
             }
+        ) else TopAppBarItem(
+            title = { Text("Urutkan") },
+            navigationIcon = TopAppBarNavigationIcon.Custom(
+                icon = Icons.Rounded.Close,
+                contentDescription = "Close",
+                onClick = onCancel
+            )
+        ),
+        bottomAppBar =
+        if (!isReorderEnabled.value) {
+            BottomAppBar.Navigation
+        } else {
+            BottomAppBar.Save(onClick = onReorder)
+        }
+    )
+}
+
+@Composable
+private fun HandleStates(
+    context: Context,
+    processesState: Resource<List<ProcessResponse>>,
+    deleteProcessState: Resource<Unit>,
+    reorderProcessState: Resource<Unit>,
+    isRefreshing: MutableState<Boolean>,
+    isShowDeleteDialog: MutableState<Boolean>,
+    isDeleting: MutableState<Boolean>,
+    isReorderEnabled: MutableState<Boolean>,
+    isReordering: MutableState<Boolean>
+) {
+    LaunchedEffect(processesState) {
+        isRefreshing.value = false
+        if (processesState is Resource.Error) {
+            ToastUtils.show(context, processesState.msg ?: "Gagal mengambil data")
+        }
+    }
+
+    LaunchedEffect(deleteProcessState) {
+        when (deleteProcessState) {
+            is Resource.Loading -> {}
+            is Resource.Success -> {
+                isShowDeleteDialog.value = false
+                isDeleting.value = false
+                ToastUtils.show(context, "Proses berhasil dihapus")
+            }
+
+            is Resource.Error -> {
+                isShowDeleteDialog.value = false
+                isDeleting.value = false
+                ToastUtils.show(context, deleteProcessState.msg ?: "Gagal menghapus proses")
+            }
+        }
+    }
+
+    LaunchedEffect(reorderProcessState) {
+        when (reorderProcessState) {
+            is Resource.Loading -> {}
+            is Resource.Success -> {
+                isReorderEnabled.value = false
+                isReordering.value = false
+                ToastUtils.show(context, "Proses berhasil diurutkan")
+            }
+
+            is Resource.Error -> {
+                isReordering.value = false
+                ToastUtils.show(context, reorderProcessState.msg ?: "Gagal mengurutkan proses")
+            }
+        }
+    }
+}
+
+@Composable
+fun ProcessLoadingState() {
+    Column(Modifier.fillMaxSize()) {
+        repeat(15) { ProcessShimmerItem() }
+    }
+}
+
+@Composable
+fun ProcessShimmerItem() {
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp, 4.dp)
+    ) {
+        Box(
+            Modifier
+                .padding(12.dp, 16.dp)
+                .fillMaxWidth(0.6f)
+                .height(16.dp)
+                .shimmerEffect()
         )
+    }
+}
+
+@Composable
+fun ProcessList(
+    processes: List<ProcessResponse>,
+    navController: NavController,
+    lazyListState: LazyListState,
+    isReorderEnabled: Boolean,
+    selectedProcessId: MutableState<String?>,
+    isShowDeleteDialog: MutableState<Boolean>,
+    onReordering: (Int, Int) -> Unit
+) {
+    val reorderableLazyColumnState = rememberReorderableLazyListState(lazyListState) { from, to ->
+        onReordering(from.index, to.index)
     }
 
     LazyColumn(
         state = lazyListState,
         modifier = Modifier.fillMaxSize()
     ) {
-        items(data, key = { it.id }) { item ->
+        items(processes, key = { it.id }) { item ->
             ReorderableItem(reorderableLazyColumnState, key = item.id) {
                 ProcessListItem(
                     item = item,
                     isReorderEnabled = isReorderEnabled,
                     onEdit = { navController.navigate("${ProcessNavigationItem.Edit.route}/${item.id}") },
                     onDelete = {
-                        isShowDeleteDialog = true
+                        selectedProcessId.value = item.id
+                        isShowDeleteDialog.value = true
                     },
                     reorderScope = this
                 )
             }
         }
     }
-
-    if (isShowDeleteDialog) {
-        DeleteDialog(
-            isLoading = false,
-            onDismiss = { isShowDeleteDialog = false },
-            onConfirmation = {
-                isShowDeleteDialog = false
-            }
-        )
-    }
 }
 
 @Composable
 fun ProcessListItem(
-    item: ProcessData,
+    item: ProcessResponse,
     isReorderEnabled: Boolean,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
@@ -156,29 +347,43 @@ fun ProcessListItem(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Row(modifier = Modifier.padding(12.dp, 8.dp)) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .padding(12.dp, 8.dp)
+            ) {
                 Text("${item.step}.")
                 Spacer(Modifier.width(8.dp))
                 Text(item.name)
             }
 
-            Row {
-                if (!isReorderEnabled) {
-                    IconButton(onClick = onEdit) {
-                        Icon(imageVector = Icons.Rounded.Edit, contentDescription = "Edit")
-                    }
-                    Spacer(Modifier.width(4.dp))
-                    IconButton(onClick = onDelete) {
-                        Icon(imageVector = Icons.Rounded.Delete, contentDescription = "Delete")
-                    }
-                } else {
-                    IconButton(
-                        onClick = {},
-                        modifier = with(reorderScope) { Modifier.draggableHandle() }) {
-                        Icon(imageVector = Icons.Rounded.Reorder, contentDescription = "Reorder")
-                    }
-                }
+            if (!isReorderEnabled) {
+                ActionButtons(onEdit, onDelete)
+            } else {
+                DragHandle(reorderScope)
             }
         }
+    }
+}
+
+@Composable
+private fun ActionButtons(onEdit: () -> Unit, onDelete: () -> Unit) {
+    Row {
+        IconButton(onClick = onEdit) {
+            Icon(imageVector = Icons.Rounded.Edit, contentDescription = "Edit")
+        }
+        IconButton(onClick = onDelete) {
+            Icon(imageVector = Icons.Rounded.Delete, contentDescription = "Delete")
+        }
+    }
+}
+
+@Composable
+private fun DragHandle(reorderScope: ReorderableCollectionItemScope) {
+    IconButton(
+        onClick = {},
+        modifier = with(reorderScope) { Modifier.draggableHandle() }
+    ) {
+        Icon(imageVector = Icons.Rounded.Reorder, contentDescription = "Reorder")
     }
 }
