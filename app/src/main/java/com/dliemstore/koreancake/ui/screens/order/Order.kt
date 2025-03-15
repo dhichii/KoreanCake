@@ -15,13 +15,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -37,7 +34,6 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -52,6 +48,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.dliemstore.koreancake.R
 import com.dliemstore.koreancake.data.source.remote.response.order.OrdersResponse
+import com.dliemstore.koreancake.ui.components.EmptyState
 import com.dliemstore.koreancake.ui.components.ErrorState
 import com.dliemstore.koreancake.ui.components.PrimaryButton
 import com.dliemstore.koreancake.ui.components.shimmerEffect
@@ -118,7 +115,11 @@ fun OrderList(
         when (val refreshState = orders.loadState.refresh) {
             is LoadState.Loading -> if (orders.itemCount == 0) OrdersLoadingState()
             is LoadState.NotLoading -> {
-                if (orders.itemCount == 0) OrdersEmptyState()
+                if (orders.itemCount == 0) EmptyState(
+                    icon = R.drawable.orders_outlined_24,
+                    title = "Belum Ada Pesanan",
+                    body = "Coba tambahkan beberapa pesanan!"
+                )
                 else OrderListContent(orders, navController, listState)
             }
 
@@ -155,27 +156,6 @@ fun OrderShimmerItem() {
                 )
             }
         }
-    }
-}
-
-@Composable
-fun OrdersEmptyState() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.orders_outlined_24),
-            contentDescription = "Empty State",
-            tint = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier.size(150.dp)
-        )
-        Text(text = "Belum Ada Pesanan", style = MaterialTheme.typography.headlineMedium)
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Coba tambahkan beberapa pesanan!", style = MaterialTheme.typography.bodyMedium)
     }
 }
 
