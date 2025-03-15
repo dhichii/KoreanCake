@@ -79,10 +79,7 @@ class ProcessViewModel @Inject constructor(private val processRepository: Proces
                 delay(300)
                 processRepository.updateProcessesStep(list.map {
                     UpdateProcessesStepRequest(it.id, it.step)
-                }).collect { result ->
-                    _reorderProcessesState.value = result
-                    if (result is Resource.Error) cancelReorderProcess()
-                }
+                }).collect { _reorderProcessesState.value = it }
             }
         }
     }
