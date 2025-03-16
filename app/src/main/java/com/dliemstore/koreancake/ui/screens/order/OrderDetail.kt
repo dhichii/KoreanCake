@@ -92,14 +92,15 @@ fun OrderDetail(
     viewModel: OrderDetailViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val pullToRefreshState = rememberPullToRefreshState()
+
     val orderState by viewModel.orderDetailState.collectAsState()
     val progressState by viewModel.updateProgressState.collectAsState()
     val deleteOrderState by viewModel.deleteOrderState.collectAsState()
 
     val isRefreshing = remember { mutableStateOf(false) }
     val isShowDeleteDialog = remember { mutableStateOf(false) }
-    val isDeletionLoading = remember { mutableStateOf(false) }
-    val pullToRefreshState = rememberPullToRefreshState()
+    val isDeleting = deleteOrderState is Resource.Loading
 
     LaunchedEffect(Unit) {
         setupScaffold(
@@ -116,8 +117,6 @@ fun OrderDetail(
         progressState = progressState,
         deleteOrderState = deleteOrderState,
         isRefreshing = isRefreshing,
-        isShowDeleteDialog = isShowDeleteDialog,
-        isDeletionLoading = isDeletionLoading,
         navController = navController
     )
 
@@ -143,14 +142,13 @@ fun OrderDetail(
         DeleteDialog(
             onDismiss = { isShowDeleteDialog.value = false },
             onConfirmation = {
-                isDeletionLoading.value = true
                 isShowDeleteDialog.value = false
                 viewModel.deleteOrder(id)
             }
         )
     }
 
-    if (isDeletionLoading.value) LoadingDialog()
+    if (isDeleting) LoadingDialog()
 }
 
 private fun setupScaffold(
@@ -178,11 +176,9 @@ private fun setupScaffold(
 private fun HandleStates(
     context: Context,
     orderState: Resource<OrderDetailResponse>,
-    deleteOrderState: Resource<Unit>,
+    deleteOrderState: Resource<Unit>?,
     progressState: Resource<Unit>,
     isRefreshing: MutableState<Boolean>,
-    isShowDeleteDialog: MutableState<Boolean>,
-    isDeletionLoading: MutableState<Boolean>,
     navController: NavController
 ) {
     LaunchedEffect(orderState) {
@@ -194,22 +190,19 @@ private fun HandleStates(
 
     LaunchedEffect(deleteOrderState) {
         when (deleteOrderState) {
-            is Resource.Loading -> {}
             is Resource.Error -> {
-                isDeletionLoading.value = false
-                isShowDeleteDialog.value = false
                 ToastUtils.show(context, deleteOrderState.msg ?: "Gagal menghapus order")
             }
 
             is Resource.Success -> {
-                isDeletionLoading.value = false
-                isShowDeleteDialog.value = false
                 ToastUtils.show(context, "Order berhasil dihapus")
                 navController.navigate(MainNavigationItem.Home.route) {
                     popUpTo(Graph.ORDER) { inclusive = true }
                     launchSingleTop = true
                 }
             }
+
+            else -> {}
         }
     }
 

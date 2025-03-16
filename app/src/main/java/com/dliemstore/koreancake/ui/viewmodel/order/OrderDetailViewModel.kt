@@ -19,8 +19,8 @@ class OrderDetailViewModel @Inject constructor(private val orderRepository: Orde
         MutableStateFlow<Resource<OrderDetailResponse>>(Resource.Loading())
     val orderDetailState: StateFlow<Resource<OrderDetailResponse>> = _orderDetailState
 
-    private val _deleteOrderState = MutableStateFlow<Resource<Unit>>(Resource.Loading())
-    val deleteOrderState: StateFlow<Resource<Unit>> = _deleteOrderState
+    private val _deleteOrderState = MutableStateFlow<Resource<Unit>?>(null)
+    val deleteOrderState: StateFlow<Resource<Unit>?> = _deleteOrderState
 
     private val _updateProgressState = MutableStateFlow<Resource<Unit>>(Resource.Loading())
     val updateProgressState: StateFlow<Resource<Unit>> = _updateProgressState
@@ -33,6 +33,7 @@ class OrderDetailViewModel @Inject constructor(private val orderRepository: Orde
     }
 
     fun deleteOrder(id: String) {
+        _deleteOrderState.value = Resource.Loading()
         viewModelScope.launch {
             delay(300)
             orderRepository.deleteOrder(id).collect { _deleteOrderState.value = it }
