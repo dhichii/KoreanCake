@@ -22,11 +22,11 @@ class ProcessViewModel @Inject constructor(private val processRepository: Proces
 
     private var originalList: List<ProcessResponse>? = null
 
-    private val _deleteProcessState = MutableStateFlow<Resource<Unit>>(Resource.Loading())
-    val deleteProcessState: StateFlow<Resource<Unit>> = _deleteProcessState
+    private val _deleteProcessState = MutableStateFlow<Resource<Unit>?>(null)
+    val deleteProcessState: StateFlow<Resource<Unit>?> = _deleteProcessState
 
-    private val _reorderProcessesState = MutableStateFlow<Resource<Unit>>(Resource.Loading())
-    val reorderProcessesState: StateFlow<Resource<Unit>> = _reorderProcessesState
+    private val _reorderProcessesState = MutableStateFlow<Resource<Unit>?>(null)
+    val reorderProcessesState: StateFlow<Resource<Unit>?> = _reorderProcessesState
 
     fun fetchProcesses() {
         viewModelScope.launch {
@@ -39,6 +39,7 @@ class ProcessViewModel @Inject constructor(private val processRepository: Proces
     }
 
     fun deleteProcess(id: String) {
+        _deleteProcessState.value = Resource.Loading()
         viewModelScope.launch {
             delay(300)
             processRepository.delete(id).collect { result ->
@@ -74,7 +75,9 @@ class ProcessViewModel @Inject constructor(private val processRepository: Proces
     }
 
     fun saveReorderedProcess() {
-        _processesState.value.data?.let { list ->
+        val list = _processesState.value.data.orEmpty()
+        if (list.isNotEmpty()) {
+            _reorderProcessesState.value = Resource.Loading()
             viewModelScope.launch {
                 delay(300)
                 processRepository.updateProcessesStep(list.map {

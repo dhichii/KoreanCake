@@ -81,12 +81,12 @@ fun Process(
 
     val isRefreshing = remember { mutableStateOf(false) }
     val isShowDeleteDialog = remember { mutableStateOf(false) }
-    val isDeleting = remember { mutableStateOf(false) }
+    val isDeleting = deleteProcessState is Resource.Loading
     val selectedProcessId = remember { mutableStateOf<String?>(null) }
 
     val isCanReorder = remember { derivedStateOf { (processesState.data?.size ?: 0) > 1 } }
     val isReorderEnabled = remember { mutableStateOf(false) }
-    val isReordering = remember { mutableStateOf(false) }
+    val isReordering = reorderProcessState is Resource.Loading
 
     LaunchedEffect(isReorderEnabled.value) {
         setupScaffold(
@@ -99,7 +99,6 @@ fun Process(
                 viewModel.cancelReorderProcess()
             },
             onReorder = {
-                isReordering.value = true
                 viewModel.saveReorderedProcess()
             }
         )
@@ -113,10 +112,7 @@ fun Process(
         deleteProcessState = deleteProcessState,
         reorderProcessState = reorderProcessState,
         isRefreshing = isRefreshing,
-        isShowDeleteDialog = isShowDeleteDialog,
-        isDeleting = isDeleting,
-        isReorderEnabled = isReorderEnabled,
-        isReordering = isReordering
+        isReorderEnabled = isReorderEnabled
     )
 
     PullToRefreshBox(
@@ -155,13 +151,13 @@ fun Process(
         DeleteDialog(
             onDismiss = { isShowDeleteDialog.value = false },
             onConfirmation = {
-                isDeleting.value = true
+                isShowDeleteDialog.value = false
                 selectedProcessId.value?.let { viewModel.deleteProcess(it) }
             }
         )
     }
 
-    if (isReordering.value || isDeleting.value) LoadingDialog()
+    if (isDeleting || isReordering) LoadingDialog()
 }
 
 private fun setupScaffold(
@@ -213,13 +209,10 @@ private fun setupScaffold(
 private fun HandleStates(
     context: Context,
     processesState: Resource<List<ProcessResponse>>,
-    deleteProcessState: Resource<Unit>,
-    reorderProcessState: Resource<Unit>,
+    deleteProcessState: Resource<Unit>?,
+    reorderProcessState: Resource<Unit>?,
     isRefreshing: MutableState<Boolean>,
-    isShowDeleteDialog: MutableState<Boolean>,
-    isDeleting: MutableState<Boolean>,
     isReorderEnabled: MutableState<Boolean>,
-    isReordering: MutableState<Boolean>
 ) {
     LaunchedEffect(processesState) {
         isRefreshing.value = false
@@ -230,34 +223,30 @@ private fun HandleStates(
 
     LaunchedEffect(deleteProcessState) {
         when (deleteProcessState) {
-            is Resource.Loading -> {}
             is Resource.Success -> {
-                isShowDeleteDialog.value = false
-                isDeleting.value = false
                 ToastUtils.show(context, "Proses berhasil dihapus")
             }
 
             is Resource.Error -> {
-                isShowDeleteDialog.value = false
-                isDeleting.value = false
                 ToastUtils.show(context, deleteProcessState.msg ?: "Gagal menghapus proses")
             }
+
+            else -> {}
         }
     }
 
     LaunchedEffect(reorderProcessState) {
         when (reorderProcessState) {
-            is Resource.Loading -> {}
             is Resource.Success -> {
                 isReorderEnabled.value = false
-                isReordering.value = false
                 ToastUtils.show(context, "Proses berhasil diurutkan")
             }
 
             is Resource.Error -> {
-                isReordering.value = false
                 ToastUtils.show(context, reorderProcessState.msg ?: "Gagal mengurutkan proses")
             }
+
+            else -> {}
         }
     }
 }
