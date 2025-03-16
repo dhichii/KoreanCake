@@ -70,6 +70,7 @@ import com.dliemstore.koreancake.data.source.remote.response.order.ProgressesIte
 import com.dliemstore.koreancake.ui.components.CustomCheckBox
 import com.dliemstore.koreancake.ui.components.DeleteDialog
 import com.dliemstore.koreancake.ui.components.ErrorState
+import com.dliemstore.koreancake.ui.components.LoadingDialog
 import com.dliemstore.koreancake.ui.components.shimmerEffect
 import com.dliemstore.koreancake.ui.navigation.graphs.Graph
 import com.dliemstore.koreancake.ui.navigation.graphs.MainNavigationItem
@@ -140,14 +141,16 @@ fun OrderDetail(
 
     if (isShowDeleteDialog.value) {
         DeleteDialog(
-            isLoading = isDeletionLoading.value,
             onDismiss = { isShowDeleteDialog.value = false },
             onConfirmation = {
                 isDeletionLoading.value = true
+                isShowDeleteDialog.value = false
                 viewModel.deleteOrder(id)
             }
         )
     }
+
+    if (isDeletionLoading.value) LoadingDialog()
 }
 
 private fun setupScaffold(

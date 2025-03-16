@@ -153,7 +153,6 @@ fun Process(
 
     if (isShowDeleteDialog.value) {
         DeleteDialog(
-            isLoading = isDeleting.value,
             onDismiss = { isShowDeleteDialog.value = false },
             onConfirmation = {
                 isDeleting.value = true
@@ -162,7 +161,7 @@ fun Process(
         )
     }
 
-    if (isReordering.value) LoadingDialog()
+    if (isReordering.value || isDeleting.value) LoadingDialog()
 }
 
 private fun setupScaffold(
