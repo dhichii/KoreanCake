@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -61,13 +62,18 @@ fun TopAppBarNavigationIcon(type: TopAppBarNavigationIcon, navController: NavCon
                 )
             }
 
-        TopAppBarNavigationIcon.CLOSE ->
-            IconButton(onClick = { navController.popBackStack() }) {
+        TopAppBarNavigationIcon.CLOSE -> {
+            val keyboardController = LocalSoftwareKeyboardController.current
+            IconButton(onClick = {
+                keyboardController?.hide()
+                navController.popBackStack()
+            }) {
                 Icon(
                     imageVector = Icons.Rounded.Close,
                     contentDescription = "Back"
                 )
             }
+        }
 
         is TopAppBarNavigationIcon.Custom ->
             IconButton(onClick = type.onClick) {
