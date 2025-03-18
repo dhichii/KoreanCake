@@ -1,5 +1,6 @@
 package com.dliemstore.koreancake.data.source.repository
 
+import com.dliemstore.koreancake.data.api.PersistentCookieStore
 import com.dliemstore.koreancake.data.api.TokenManager
 import com.dliemstore.koreancake.data.api.service.AuthService
 import com.dliemstore.koreancake.data.api.service.OrderService
@@ -20,9 +21,10 @@ object RepositoryModule {
     @Singleton
     fun provideAuthRepository(
         authService: AuthService,
-        tokenManager: TokenManager
+        tokenManager: TokenManager,
+        persistentCookieStore: PersistentCookieStore
     ): AuthRepository {
-        return AuthRepository(authService, tokenManager)
+        return AuthRepository(authService, tokenManager, persistentCookieStore)
     }
 
     @Provides

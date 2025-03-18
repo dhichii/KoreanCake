@@ -1,5 +1,6 @@
 package com.dliemstore.koreancake.data.source.repository.auth
 
+import com.dliemstore.koreancake.data.api.PersistentCookieStore
 import com.dliemstore.koreancake.data.api.TokenManager
 import com.dliemstore.koreancake.data.api.service.AuthService
 import com.dliemstore.koreancake.data.source.remote.request.auth.LoginRequest
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 class AuthRepository @Inject constructor(
     private val authService: AuthService,
-    private val tokenManager: TokenManager
+    private val tokenManager: TokenManager,
+    private val persistentCookieStore: PersistentCookieStore
 ) {
     fun register(
         name: String,
@@ -79,6 +81,35 @@ class AuthRepository @Inject constructor(
                 }
 
                 emit(Resource.Error(errorMessage, response.code(), errorResponse?.errors))
+            }
+        } catch (e: Exception) {
+            val errorMessage = if (e is IOException) {
+                "Tidak ada koneksi internet."
+            } else {
+                "Terjadi kesalahan yang tidak terduga"
+            }
+            emit(Resource.Error(errorMessage))
+        }
+    }.flowOn(Dispatchers.IO)
+
+    fun logout() = flow {
+        emit(Resource.Loading())
+
+        try {
+            val response = authService.logout()
+            if (response.isSuccessful) {
+                tokenManager.clearToken()
+                persistentCookieStore.clear()
+
+                emit(Resource.Success(Unit, response.code()))
+            } else {
+                val errorResponse = runCatching { ApiUtils.parseError(response) }.getOrNull()
+                val errorMessage = when (response.code()) {
+                    500 -> "Terjadi kesalahan pada server"
+                    else -> errorResponse?.message ?: "Logout gagal. Silakan coba lagi."
+                }
+
+                emit(Resource.Error(errorMessage, response.code()))
             }
         } catch (e: Exception) {
             val errorMessage = if (e is IOException) {
