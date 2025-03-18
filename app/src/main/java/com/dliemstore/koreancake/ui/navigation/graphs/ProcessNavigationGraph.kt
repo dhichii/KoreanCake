@@ -60,7 +60,7 @@ fun NavGraphBuilder.processNavigationGraph(
         }
 
         composable(
-            route = "${ProcessNavigationItem.Edit.route}/{id}",
+            route = "${ProcessNavigationItem.Edit.route}/{id}/{name}/{step}",
             enterTransition = {
                 fadeIn(animationSpec = tween(500)) + slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Up, tween(500)

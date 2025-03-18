@@ -302,7 +302,7 @@ fun ProcessList(
                 ProcessListItem(
                     item = item,
                     isReorderEnabled = isReorderEnabled,
-                    onEdit = { navController.navigate("${ProcessNavigationItem.Edit.route}/${item.id}") },
+                    onEdit = { navController.navigate("${ProcessNavigationItem.Edit.route}/${item.id}/${item.name}/${item.step}") },
                     onDelete = {
                         selectedProcessId.value = item.id
                         isShowDeleteDialog.value = true
