@@ -3,11 +3,15 @@ package com.dliemstore.koreancake.ui.screens.settings
 import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -33,16 +37,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.dliemstore.koreancake.data.api.TokenManager
+import com.dliemstore.koreancake.data.source.remote.response.user.UserProfileResponse
 import com.dliemstore.koreancake.ui.components.BottomAppBar
 import com.dliemstore.koreancake.ui.components.LoadingDialog
 import com.dliemstore.koreancake.ui.components.LogoutDialog
+import com.dliemstore.koreancake.ui.components.shimmerEffect
 import com.dliemstore.koreancake.ui.navigation.graphs.Graph
 import com.dliemstore.koreancake.ui.navigation.graphs.ScaffoldViewState
 import com.dliemstore.koreancake.ui.navigation.graphs.SettingsNavigationItem
 import com.dliemstore.koreancake.ui.navigation.graphs.TopAppBarItem
 import com.dliemstore.koreancake.ui.viewmodel.settings.SettingsViewModel
-import com.dliemstore.koreancake.util.JWTUtils
 import com.dliemstore.koreancake.util.Resource
 import com.dliemstore.koreancake.util.ToastUtils
 
@@ -55,10 +59,11 @@ fun Settings(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val tokenManager = TokenManager(context)
-    val user = JWTUtils.decodePayload(tokenManager.getToken())
 
+    val userProfileState by viewModel.userProfileState.collectAsState()
     val logoutState by viewModel.logoutState.collectAsState()
+
+    val isProfileLoading = userProfileState is Resource.Loading
 
     val isShowLogoutDialog = remember { mutableStateOf(false) }
     val isLoggingOut = logoutState is Resource.Loading
@@ -68,15 +73,22 @@ fun Settings(
             topAppBar = TopAppBarItem(title = { Text("Settings") }),
             bottomAppBar = BottomAppBar.Navigation
         )
+        viewModel.fetchUserProfile()
     }
 
-    HandleStates(context = context, navController = navController, logoutState = logoutState)
+    HandleStates(
+        context = context,
+        navController = navController,
+        userProfileState = userProfileState,
+        logoutState = logoutState
+    )
 
     Column(Modifier.fillMaxSize()) {
         SettingProfile(
-            name = user?.optString("name"),
-            username = user?.optString("username"),
-            email = user?.optString("email"),
+            name = userProfileState.data?.name,
+            username = userProfileState.data?.username,
+            email = userProfileState.data?.email,
+            isLoading = isProfileLoading
         )
         SettingsList(navController)
         SettingLogout { isShowLogoutDialog.value = true }
@@ -99,8 +111,15 @@ fun Settings(
 fun HandleStates(
     context: Context,
     navController: NavController,
+    userProfileState: Resource<UserProfileResponse>,
     logoutState: Resource<Unit>?
 ) {
+    LaunchedEffect(userProfileState) {
+        if (userProfileState is Resource.Error) {
+            ToastUtils.show(context, logoutState?.msg ?: "Gagal Logout")
+        }
+    }
+
     LaunchedEffect(logoutState) {
         when (logoutState) {
             is Resource.Success -> {
@@ -119,21 +138,40 @@ fun HandleStates(
 }
 
 @Composable
-fun SettingProfile(name: String?, username: String?, email: String?) {
+fun SettingProfile(name: String?, username: String?, email: String?, isLoading: Boolean) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
             .padding(12.dp)
     ) {
-        Text(
-            text = name ?: "-",
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
-        )
-        Text(text = "@$username")
-        Text(text = email ?: "-")
+        if (isLoading) LoadingProfileShimmer()
+        else SettingProfileContent(name, username, email)
     }
+}
+
+@Composable
+private fun LoadingProfileShimmer() {
+    listOf(100, 80, 100).forEach {
+        Box(
+            Modifier
+                .height(20.dp)
+                .width(it.dp)
+                .shimmerEffect()
+        )
+        Spacer(Modifier.height(4.dp))
+    }
+}
+
+@Composable
+private fun SettingProfileContent(name: String?, username: String?, email: String?) {
+    Text(
+        text = name ?: "-",
+        fontSize = 16.sp,
+        fontWeight = FontWeight.Bold
+    )
+    Text(text = "@${username ?: "-"}")
+    Text(text = email ?: "-")
 }
 
 @Composable
@@ -145,7 +183,7 @@ fun SettingsList(navController: NavController) {
         SettingsItem("Ubah Password", SettingsNavigationItem.Password.route)
     )
 
-    SettingSection(title = "Settings", content = {
+    SettingSection(title = "Settings") {
         LazyColumn {
             items(settingsOptions) { setting ->
                 SettingListItem(
@@ -154,7 +192,7 @@ fun SettingsList(navController: NavController) {
                 )
             }
         }
-    })
+    }
 }
 
 @Composable
