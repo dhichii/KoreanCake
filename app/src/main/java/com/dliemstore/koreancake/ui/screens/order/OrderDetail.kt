@@ -392,7 +392,7 @@ fun OrderDetailInfoRow(label: String, value: String) {
             text = value,
             color = colorResource(R.color.black_700),
             fontSize = 12.sp,
-            modifier = Modifier.fillMaxWidth(0.7f)
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
