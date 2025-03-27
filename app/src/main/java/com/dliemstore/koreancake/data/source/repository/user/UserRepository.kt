@@ -1,5 +1,7 @@
 package com.dliemstore.koreancake.data.source.repository.user
 
+import com.dliemstore.koreancake.data.api.PersistentCookieStore
+import com.dliemstore.koreancake.data.api.TokenManager
 import com.dliemstore.koreancake.data.api.service.UserService
 import com.dliemstore.koreancake.data.source.remote.request.user.UpdateEmailRequest
 import com.dliemstore.koreancake.data.source.remote.request.user.UpdatePasswordRequest
@@ -15,7 +17,11 @@ import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
 
-class UserRepository @Inject constructor(private val userService: UserService) {
+class UserRepository @Inject constructor(
+    private val userService: UserService,
+    private val tokenManager: TokenManager,
+    private val persistentCookieStore: PersistentCookieStore
+) {
     fun getProfile() = flow {
         emit(Resource.Loading())
 
@@ -46,16 +52,18 @@ class UserRepository @Inject constructor(private val userService: UserService) {
         userService.updateProfile(UpdateProfileRequest(name))
     }
 
-    fun updateEmail(email: String): Flow<Resource<Unit>> = updateUser {
-        userService.updateEmail(UpdateEmailRequest(email))
-    }
+    fun updateEmail(password: String, email: String): Flow<Resource<Unit>> =
+        updateUser(shouldLogout = true) {
+            userService.updateEmail(UpdateEmailRequest(password, email))
+        }
 
-    fun updateUsername(username: String): Flow<Resource<Unit>> = updateUser {
-        userService.updateUsername(UpdateUsernameRequest(username))
-    }
+    fun updateUsername(password: String, username: String): Flow<Resource<Unit>> =
+        updateUser(shouldLogout = true) {
+            userService.updateUsername(UpdateUsernameRequest(password, username))
+        }
 
     fun updatePassword(oldPassword: String, newPassword: String): Flow<Resource<Unit>> =
-        updateUser {
+        updateUser(shouldLogout = true) {
             userService.updatePassword(
                 UpdatePasswordRequest(
                     oldPassword = oldPassword,
@@ -64,12 +72,20 @@ class UserRepository @Inject constructor(private val userService: UserService) {
             )
         }
 
-    private fun updateUser(apiCall: suspend () -> Response<Unit>): Flow<Resource<Unit>> = flow {
+    private fun updateUser(
+        shouldLogout: Boolean = false,
+        apiCall: suspend () -> Response<Unit>
+    ): Flow<Resource<Unit>> = flow {
         emit(Resource.Loading())
 
         try {
             val response = apiCall()
             if (response.isSuccessful) {
+                if (shouldLogout) {
+                    tokenManager.clearToken()
+                    persistentCookieStore.clear()
+                }
+
                 emit(Resource.Success(Unit, response.code()))
             } else {
                 val errorResponse = runCatching { ApiUtils.parseError(response) }.getOrNull()

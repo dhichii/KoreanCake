@@ -21,60 +21,44 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.dliemstore.koreancake.ui.components.LoadingDialog
-import com.dliemstore.koreancake.ui.components.PasswordInput
 import com.dliemstore.koreancake.ui.components.PrimaryButton
 import com.dliemstore.koreancake.ui.components.TextInput
-import com.dliemstore.koreancake.ui.navigation.graphs.AuthNavigationItem
-import com.dliemstore.koreancake.ui.navigation.graphs.Graph
 import com.dliemstore.koreancake.ui.navigation.graphs.ScaffoldViewState
-import com.dliemstore.koreancake.ui.navigation.graphs.SettingType
 import com.dliemstore.koreancake.ui.navigation.graphs.TopAppBarItem
 import com.dliemstore.koreancake.ui.navigation.graphs.TopAppBarNavigationIcon
-import com.dliemstore.koreancake.ui.viewmodel.settings.SettingsFormViewModel
-import kotlinx.coroutines.delay
+import com.dliemstore.koreancake.ui.viewmodel.settings.UpdateProfileViewModel
 
 @Composable
-fun SettingsForm(
-    settingType: SettingType,
+fun UpdateProfile(
     navController: NavController,
     scaffoldViewState: MutableState<ScaffoldViewState>,
-    topAppBarTitle: String,
-    viewModel: SettingsFormViewModel = hiltViewModel()
+    viewModel: UpdateProfileViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val settingsFormState by viewModel.settingsFormState.collectAsState()
+    val updateProfileState by viewModel.updateProfileState.collectAsState()
     val isPrimaryButtonEnabled =
-        settingsFormState.password.isNotBlank() &&
-                settingsFormState.input.isNotBlank() &&
-                settingsFormState.passwordError == null &&
-                settingsFormState.inputError == null
+        updateProfileState.name.isNotBlank() &&
+                updateProfileState.error == null
     val isShowLoadingDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         scaffoldViewState.value = ScaffoldViewState(
             TopAppBarItem(
-                title = { Text(topAppBarTitle) },
+                title = { Text("Profile") },
                 navigationIcon = TopAppBarNavigationIcon.CLOSE
             )
         )
     }
 
-    LaunchedEffect(settingsFormState) {
+    LaunchedEffect(updateProfileState) {
         when {
-            settingsFormState.isSuccess -> {
-                Toast.makeText(context, "update berhasil!", Toast.LENGTH_SHORT).show()
-                isShowLoadingDialog.value = true
-
-                delay(700)
-
-                isShowLoadingDialog.value = false
-                navController.navigate(AuthNavigationItem.Login.route) {
-                    popUpTo(Graph.MAIN) { inclusive = true }
-                }
+            updateProfileState.isSuccess -> {
+                Toast.makeText(context, "Update berhasil!", Toast.LENGTH_SHORT).show()
+                navController.popBackStack()
             }
 
-            settingsFormState.errorMessage != null -> {
-                Toast.makeText(context, settingsFormState.errorMessage, Toast.LENGTH_SHORT).show()
+            updateProfileState.errorMessage != null -> {
+                Toast.makeText(context, updateProfileState.errorMessage, Toast.LENGTH_SHORT).show()
                 viewModel.clearErrorMessage()
             }
         }
@@ -85,26 +69,19 @@ fun SettingsForm(
             .fillMaxSize()
             .padding(12.dp)
     ) {
-        PasswordInput(
-            value = settingsFormState.password,
-            onInputChanged = { viewModel.onPasswordChange(it) },
-            label = "Password",
-            errorMessage = settingsFormState.passwordError
-        )
-
         TextInput(
-            value = settingsFormState.input,
-            onInputChanged = { viewModel.onInputChange(settingType, it) },
-            label = settingType.fieldLabel,
-            errorMessage = settingsFormState.inputError
+            value = updateProfileState.name,
+            onInputChanged = { viewModel.onInputChange(it) },
+            label = "Nama",
+            errorMessage = updateProfileState.error
         )
 
         Spacer(modifier = Modifier.height(16.dp))
         PrimaryButton(
             text = "Simpan",
             enabled = isPrimaryButtonEnabled,
-            isLoading = settingsFormState.isLoading,
-            onClick = { viewModel.updateSetting(settingType) },
+            isLoading = updateProfileState.isLoading,
+            onClick = { viewModel.updateProfile() },
             modifier = Modifier.fillMaxWidth()
         )
     }

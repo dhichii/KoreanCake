@@ -1,10 +1,8 @@
 package com.dliemstore.koreancake.ui.state.settings
 
-data class SettingsFormState(
-    val password: String = "",
-    val passwordError: String? = null,
-    val input: String = "",
-    val inputError: String? = null,
+data class UpdateProfileState(
+    val name: String = "",
+    val error: String? = null,
     val isLoading: Boolean = false,
     val isSuccess: Boolean = false,
     val statusCode: Int? = null,

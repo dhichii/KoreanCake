@@ -5,9 +5,8 @@ import com.dliemstore.koreancake.util.RegexUtils
 import com.dliemstore.koreancake.util.ValidationHelper
 
 object SettingsFormValidator {
-    fun validate(settingType: SettingType, input: String): String? {
+    fun validateInput(settingType: SettingType, input: String): String? {
         return when (settingType) {
-            is SettingType.Profile -> ValidationHelper.required(input, "Nama")
             is SettingType.Username -> listOfNotNull(
                 ValidationHelper.required(input, "Username"),
                 ValidationHelper.minLength(input, 3, "Username"),
@@ -19,5 +18,12 @@ object SettingsFormValidator {
                 if (!RegexUtils.isValidEmail(input)) "Email tidak valid." else null
             ).firstOrNull()
         }
+    }
+
+    fun validatePassword(password: String): String? {
+        return listOfNotNull(
+            ValidationHelper.required(password, "Password"),
+            ValidationHelper.minLength(password, 8, "Password")
+        ).firstOrNull()
     }
 }

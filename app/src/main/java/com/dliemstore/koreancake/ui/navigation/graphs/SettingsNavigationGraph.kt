@@ -8,6 +8,7 @@ import androidx.navigation.navigation
 import com.dliemstore.koreancake.ui.screens.settings.ChangePassword
 import com.dliemstore.koreancake.ui.screens.settings.Settings
 import com.dliemstore.koreancake.ui.screens.settings.SettingsForm
+import com.dliemstore.koreancake.ui.screens.settings.UpdateProfile
 
 enum class SettingsScreen {
     SETTINGS_MAIN,
@@ -29,9 +30,6 @@ sealed class SettingType(
     val fieldLabel: String,
     val route: String
 ) {
-    data object Profile :
-        SettingType("Nama", route = SettingsNavigationItem.Profile.route)
-
     data object Email :
         SettingType("Email Baru", route = SettingsNavigationItem.Email.route)
 
@@ -52,7 +50,7 @@ fun NavGraphBuilder.settingsNavigationGraph(
         }
 
         composable(route = SettingsNavigationItem.Profile.route) {
-            SettingsForm(SettingType.Profile, navController, scaffoldViewState, "Profil")
+            UpdateProfile(navController, scaffoldViewState)
         }
 
         composable(route = SettingsNavigationItem.Email.route) {

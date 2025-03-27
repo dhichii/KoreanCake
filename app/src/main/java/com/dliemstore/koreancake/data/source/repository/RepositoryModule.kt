@@ -43,7 +43,11 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideUserRepository(userService: UserService): UserRepository {
-        return UserRepository(userService)
+    fun provideUserRepository(
+        userService: UserService,
+        tokenManager: TokenManager,
+        persistentCookieStore: PersistentCookieStore
+    ): UserRepository {
+        return UserRepository(userService, tokenManager, persistentCookieStore)
     }
 }

@@ -25,6 +25,23 @@ class SettingsFormViewModel @Inject constructor(private val userRepository: User
         _settingsFormState.update { it.copy(errorMessage = null) }
     }
 
+    fun onPasswordChange(value: String) {
+        val state = _settingsFormState.value
+
+        if (state.errorMessage != null) {
+            clearErrorMessage()
+        }
+
+        val newError = SettingsFormValidator.validatePassword(value)
+
+        _settingsFormState.update {
+            it.copy(
+                password = value,
+                passwordError = newError
+            )
+        }
+    }
+
     fun onInputChange(settingType: SettingType, value: String) {
         val state = _settingsFormState.value
 
@@ -32,24 +49,46 @@ class SettingsFormViewModel @Inject constructor(private val userRepository: User
             clearErrorMessage()
         }
 
-        val newError = SettingsFormValidator.validate(settingType, value)
+        val newError = SettingsFormValidator.validateInput(settingType, value)
 
         _settingsFormState.update {
             it.copy(
                 input = value,
-                error = newError
+                inputError = newError
             )
         }
     }
 
     fun updateSetting(settingType: SettingType) {
+        val passwordValidationResult = SettingsFormValidator.validatePassword(
+            _settingsFormState.value.password,
+        )
+
+        val inputValidationResult = SettingsFormValidator.validateInput(
+            settingType,
+            _settingsFormState.value.input
+        )
+        if (passwordValidationResult != null || inputValidationResult != null) {
+            _settingsFormState.value = settingsFormState.value.copy(
+                passwordError = passwordValidationResult,
+                inputError = inputValidationResult
+            )
+            return
+        }
+
         viewModelScope.launch {
             _settingsFormState.value = _settingsFormState.value.copy(isLoading = true)
             delay(300)
             val response = when (settingType) {
-                SettingType.Profile -> userRepository.updateProfile(_settingsFormState.value.input)
-                SettingType.Email -> userRepository.updateEmail(_settingsFormState.value.input)
-                SettingType.Username -> userRepository.updateUsername(_settingsFormState.value.input)
+                SettingType.Email -> userRepository.updateEmail(
+                    _settingsFormState.value.password,
+                    _settingsFormState.value.input
+                )
+
+                SettingType.Username -> userRepository.updateUsername(
+                    _settingsFormState.value.password,
+                    _settingsFormState.value.input
+                )
             }
 
             response.collect { result ->
@@ -60,12 +99,20 @@ class SettingsFormViewModel @Inject constructor(private val userRepository: User
                         isLoading = false
                     )
 
-                    is Resource.Error -> _settingsFormState.value.copy(
-                        isLoading = false,
-                        errorMessage = result.msg,
-                        statusCode = result.code,
-                        error = result.errors?.get(0)?.message
-                    )
+                    is Resource.Error -> {
+                        val passwordError =
+                            result.errors?.firstOrNull { it.path == "password" }?.message
+                        val inputError =
+                            result.errors?.firstOrNull { it.path == "email" || it.path == "username" }?.message
+
+                        _settingsFormState.value.copy(
+                            isLoading = false,
+                            errorMessage = result.msg,
+                            statusCode = result.code,
+                            passwordError = passwordError,
+                            inputError = inputError
+                        )
+                    }
 
                     else -> _settingsFormState.value
                 }
