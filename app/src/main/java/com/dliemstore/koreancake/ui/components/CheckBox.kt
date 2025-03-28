@@ -24,18 +24,18 @@ import com.dliemstore.koreancake.util.Progress
 fun CustomCheckBox(
     isChecked: Boolean,
     label: String,
+    modifier: Modifier = Modifier,
     onClicked: (Boolean) -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(32.dp)
+        modifier = modifier
             .selectable(
                 selected = isChecked,
                 onClick = { onClicked(!isChecked) },
                 role = Role.Checkbox
             )
+            .padding(vertical = 8.dp)
     ) {
         Checkbox(
             checked = isChecked,

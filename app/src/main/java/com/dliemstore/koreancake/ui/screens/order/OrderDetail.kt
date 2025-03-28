@@ -471,6 +471,7 @@ fun OrderDetailProgresses(
                 CustomCheckBox(
                     isChecked = progress.isFinish,
                     label = progress.name,
+                    modifier = Modifier.fillMaxWidth(),
                     onClicked = { onProgressChanged(orderId, progress.id, it) }
                 )
             }
