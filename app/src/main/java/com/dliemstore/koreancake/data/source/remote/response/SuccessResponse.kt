@@ -6,6 +6,8 @@ data class SuccessResponse<T>(
     @SerializedName("data") val data: T,
 )
 
+data class CreatedResponse<T>(val id: T)
+
 data class PaginationSuccessResponse<T>(
     @SerializedName("limit") val limit: Int,
     @SerializedName("totalPage") val totalPage: Int,
