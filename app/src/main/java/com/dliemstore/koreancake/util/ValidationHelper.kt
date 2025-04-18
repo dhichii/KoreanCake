@@ -5,6 +5,14 @@ object ValidationHelper {
         return if (value.isNullOrBlank()) "$fieldName tidak boleh kosong." else null
     }
 
+    fun required(value: Long?, fieldName: String): String? {
+        return if (value == null || value < 1L) "$fieldName tidak boleh kosong." else null
+    }
+
+    fun required(value: List<Any>, fieldName: String): String? {
+        return if (value.isEmpty()) "$fieldName tidak boleh kosong." else null
+    }
+
     fun minLength(value: String?, minLength: Int, fieldName: String): String? {
         return if (value != null && value.length < minLength) {
             "$fieldName minimal harus $minLength karakter."
@@ -23,6 +31,24 @@ object ValidationHelper {
 
     fun minInteger(value: String?, minValue: Int, fieldName: String): String? {
         val number = value?.toIntOrNull()
+        return if (number != null && number < minValue) "$fieldName tidak boleh kurang dari $minValue." else null
+    }
+
+    fun maxInteger(value: String?, maxValue: Int, fieldName: String): String? {
+        val number = value?.toIntOrNull()
+        return if (number != null && number > maxValue) "$fieldName tidak boleh lebih dari $maxValue." else null
+    }
+
+    fun maxInteger(value: Int?, maxValue: Int, fieldName: String): String? {
+        return if (value != null && value > maxValue) "$fieldName tidak boleh lebih dari $maxValue." else null
+    }
+
+    fun isValidDouble(value: String?, fieldName: String): String? {
+        return if (value != null && value.toDoubleOrNull() == null) "$fieldName hanya boleh berupa angka." else null
+    }
+
+    fun minDouble(value: String?, minValue: Int, fieldName: String): String? {
+        val number = value?.toDoubleOrNull()
         return if (number != null && number < minValue) "$fieldName tidak boleh kurang dari $minValue." else null
     }
 }
