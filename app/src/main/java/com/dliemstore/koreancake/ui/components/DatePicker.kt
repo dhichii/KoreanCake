@@ -3,6 +3,7 @@ package com.dliemstore.koreancake.ui.components
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.DateRange
@@ -33,47 +34,53 @@ fun CustomDatePicker(
     value: Long? = null,
     onSelected: (Long?) -> Unit,
     label: String,
-    modifier: Modifier = Modifier
+    errorMessage: String? = null,
+    modifier: Modifier = Modifier.fillMaxWidth()
 ) {
-    var selectedDate by remember { mutableStateOf(value) }
     var showModal by remember { mutableStateOf(false) }
     var labelFontSize by remember {
         mutableStateOf(14.sp)
     }
 
-    OutlinedTextField(
-        value = selectedDate?.epochToDate()?.formatDate() ?: "",
-        onValueChange = {},
-        label = { Text(label, fontSize = labelFontSize) },
-        placeholder = { Text("MM/DD/YYYY", fontSize = 14.sp) },
-        trailingIcon = {
-            Icon(Icons.Rounded.DateRange, contentDescription = "Select date")
-        },
-        readOnly = true,
-        modifier = modifier
-            .fillMaxWidth()
-            .pointerInput(selectedDate) {
-                awaitEachGesture {
-                    // Modifier.clickable doesn't work for text fields, so we use Modifier.pointerInput
-                    // in the Initial pass to observe events before the text field consumes them
-                    // in the Main pass.
-                    awaitFirstDown(pass = PointerEventPass.Initial)
-                    val upEvent = waitForUpOrCancellation(pass = PointerEventPass.Initial)
-                    if (upEvent != null) {
-                        showModal = true
+    Column(modifier = modifier) {
+        OutlinedTextField(
+            value = value?.epochToDate()?.formatDate() ?: "",
+            onValueChange = {},
+            label = { Text(label, fontSize = labelFontSize) },
+            placeholder = { Text("MM/DD/YYYY", fontSize = 14.sp) },
+            trailingIcon = {
+                Icon(Icons.Rounded.DateRange, contentDescription = "Select date")
+            },
+            isError = errorMessage != null,
+            readOnly = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .pointerInput(showModal) {
+                    awaitEachGesture {
+                        // Modifier.clickable doesn't work for text fields, so we use Modifier.pointerInput
+                        // in the Initial pass to observe events before the text field consumes them
+                        // in the Main pass.
+                        awaitFirstDown(pass = PointerEventPass.Initial)
+                        val upEvent = waitForUpOrCancellation(pass = PointerEventPass.Initial)
+                        if (upEvent != null) {
+                            showModal = true
+                        }
                     }
                 }
-            }
-            .onFocusChanged {
-                labelFontSize =
-                    if (it.isFocused || selectedDate != null) TextUnit.Unspecified else 14.sp
-            }
-    )
+                .onFocusChanged {
+                    labelFontSize =
+                        if (it.isFocused || value != null) TextUnit.Unspecified else 14.sp
+                }
+        )
+
+        errorMessage?.let {
+            ErrorText(text = it)
+        }
+    }
 
     if (showModal) {
         DatePickerModal(
             onDateSelected = {
-                selectedDate = it
                 onSelected(it)
             },
             onDismiss = { showModal = false }

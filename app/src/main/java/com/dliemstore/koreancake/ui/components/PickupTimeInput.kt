@@ -38,20 +38,24 @@ fun PickupTimeInput(
     items: List<String>,
     onSelected: (String) -> Unit,
     label: String,
+    errorMessage: String? = null,
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
     var isShowed by remember { mutableStateOf(false) }
-    var timeState by remember { mutableStateOf(value) }
 
     Box(modifier = modifier) {
         TextInput(
-            value = timeState, onInputChanged = {}, label = label, trailingIcon = {
+            value = value,
+            onInputChanged = {},
+            label = label,
+            trailingIcon = {
                 Icon(
                     if (isShowed) Icons.Rounded.KeyboardArrowUp else Icons.Rounded.KeyboardArrowDown,
                     contentDescription = label
                 )
             },
             readOnly = true,
+            errorMessage = errorMessage,
             modifier = Modifier.pointerInput(isShowed) {
                 awaitEachGesture {
                     // Modifier.clickable doesn't work for text fields, so we use Modifier.pointerInput
@@ -80,7 +84,6 @@ fun PickupTimeInput(
                         TextButton(
                             onClick = {
                                 onSelected(item)
-                                timeState = item
                                 isShowed = false
                             },
                             modifier = Modifier.fillMaxWidth()
