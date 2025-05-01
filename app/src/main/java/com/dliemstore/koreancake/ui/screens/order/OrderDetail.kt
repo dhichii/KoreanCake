@@ -368,8 +368,9 @@ fun OrderDetailInfo(data: OrderDetailResponse) {
         OrderDetailInfoRow("Tanggal", pickupDate)
         OrderDetailInfoRow("Jam", pickupTime.time)
 
-        val size = "${data.size}cm ${data.layer.let { "$it layer" }}"
+        val size = "${data.size}cm ${data.layer?.let { "$it layer" } ?: ""}"
         OrderDetailInfoRow("Ukuran", size)
+        OrderDetailInfoRow("Pakai Topper", if (data.isUseTopper) "Ya" else "Tidak")
         OrderDetailInfoRow("Tulisan", data.text)
         OrderDetailInfoRow("Warna Tulisan", data.textColor)
         OrderDetailInfoRow("Harga", data.price.formatCurrency())
