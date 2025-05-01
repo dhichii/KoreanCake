@@ -74,8 +74,7 @@ fun NavGraphBuilder.orderNavigationGraph(
                 AnimatedContentTransitionScope.SlideDirection.Down, tween(500)
             )
         }
-    ) { backStackEntry ->
-        val id = backStackEntry.arguments?.getString("id")!!
-        EditOrder(id, scaffoldViewState)
+    ) {
+        EditOrder(navController, scaffoldViewState)
     }
 }
