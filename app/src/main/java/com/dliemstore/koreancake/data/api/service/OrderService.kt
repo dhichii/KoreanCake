@@ -37,6 +37,14 @@ interface OrderService {
     @GET("orders/{id}")
     suspend fun getById(@Path("id") id: String): Response<SuccessResponse<OrderDetailResponse>>
 
+    @Multipart
+    @PUT("orders/{id}")
+    suspend fun updateById(
+        @Path("id") id: String,
+        @Part addedPictures: List<MultipartBody.Part>,
+        @Part("data") data: RequestBody
+    ): Response<Unit>
+
     @DELETE("orders/{id}")
     suspend fun deleteById(@Path("id") id: String): Response<Unit>
 
