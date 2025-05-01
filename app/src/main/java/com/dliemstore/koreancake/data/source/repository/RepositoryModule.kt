@@ -10,6 +10,7 @@ import com.dliemstore.koreancake.data.source.repository.auth.AuthRepository
 import com.dliemstore.koreancake.data.source.repository.order.OrderRepository
 import com.dliemstore.koreancake.data.source.repository.process.ProcessRepository
 import com.dliemstore.koreancake.data.source.repository.user.UserRepository
+import com.dliemstore.koreancake.util.FileUtils
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,8 +32,8 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideOrderRepository(orderService: OrderService): OrderRepository {
-        return OrderRepository(orderService)
+    fun provideOrderRepository(orderService: OrderService, fileUtils: FileUtils): OrderRepository {
+        return OrderRepository(orderService, fileUtils)
     }
 
     @Provides

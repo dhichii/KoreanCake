@@ -11,7 +11,7 @@ import com.dliemstore.koreancake.data.source.remote.request.order.AddOrderReques
 import com.dliemstore.koreancake.data.source.remote.request.order.UpdateOrderProgressRequest
 import com.dliemstore.koreancake.data.source.remote.response.order.OrdersResponse
 import com.dliemstore.koreancake.util.ApiUtils
-import com.dliemstore.koreancake.util.FileUtils.uriToFile
+import com.dliemstore.koreancake.util.FileUtils
 import com.dliemstore.koreancake.util.Resource
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +26,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 class OrderRepository @Inject constructor(
-    private val orderService: OrderService
+    private val orderService: OrderService,
+    private val fileUtils: FileUtils
 ) {
     fun addOrder(
         context: Context,
@@ -38,7 +39,7 @@ class OrderRepository @Inject constructor(
         val jsonBody = Gson().toJson(addOrderRequest)
         val data = jsonBody.toRequestBody("application/json".toMediaType())
         val fileParts = pictureUris.map { uri ->
-            val file = uriToFile(context, uri)
+            val file = fileUtils.uriToFile(uri)
             val mimeType: String = context.contentResolver.getType(uri) ?: "image/jpeg"
             val requestFile = file.asRequestBody(mimeType.toMediaType())
             MultipartBody.Part.createFormData("pictures", file.name, requestFile)
@@ -65,7 +66,7 @@ class OrderRepository @Inject constructor(
             }
             emit(Resource.Error(errorMessage))
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
     fun getOrders(status: String): Flow<PagingData<OrdersResponse>> {
         val limit = 20
