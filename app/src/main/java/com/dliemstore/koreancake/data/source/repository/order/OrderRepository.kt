@@ -9,6 +9,7 @@ import com.dliemstore.koreancake.data.api.service.OrderService
 import com.dliemstore.koreancake.data.paging.BasePagingSource
 import com.dliemstore.koreancake.data.source.remote.request.order.AddOrderRequest
 import com.dliemstore.koreancake.data.source.remote.request.order.UpdateOrderProgressRequest
+import com.dliemstore.koreancake.data.source.remote.request.order.UpdateOrderRequest
 import com.dliemstore.koreancake.data.source.remote.response.order.OrdersResponse
 import com.dliemstore.koreancake.util.ApiUtils
 import com.dliemstore.koreancake.util.FileUtils
@@ -92,6 +93,46 @@ class OrderRepository @Inject constructor(
                 orderService.getById(id)
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()?.data, response.code()))
+            } else {
+                val errorResponse = runCatching { ApiUtils.parseError(response) }.getOrNull()
+                val errorMessage = when (response.code()) {
+                    500 -> "Terjadi kesalahan pada server"
+                    else -> errorResponse?.message ?: "Permintaan tidak valid."
+                }
+
+                emit(Resource.Error(errorMessage, response.code(), errorResponse?.errors))
+            }
+        } catch (e: Exception) {
+            val errorMessage = if (e is IOException) {
+                "Tidak ada koneksi internet."
+            } else {
+                "Terjadi kesalahan yang tidak terduga"
+            }
+            emit(Resource.Error(errorMessage))
+        }
+    }.flowOn(Dispatchers.IO)
+
+    fun updateOrder(
+        id: String,
+        context: Context,
+        addedPictureUris: List<Uri>,
+        updateOrderRequest: UpdateOrderRequest
+    ) = flow {
+        emit(Resource.Loading())
+
+        val jsonBody = Gson().toJson(updateOrderRequest)
+        val data = jsonBody.toRequestBody("application/json".toMediaType())
+        val fileParts = addedPictureUris.map { uri ->
+            val file = fileUtils.uriToFile(uri)
+            val mimeType: String = context.contentResolver.getType(uri) ?: "image/jpeg"
+            val requestFile = file.asRequestBody(mimeType.toMediaType())
+            MultipartBody.Part.createFormData("addedPictures", file.name, requestFile)
+        }
+
+        try {
+            val response = orderService.updateById(id, fileParts, data)
+            if (response.isSuccessful) {
+                emit(Resource.Success(Unit, response.code()))
             } else {
                 val errorResponse = runCatching { ApiUtils.parseError(response) }.getOrNull()
                 val errorMessage = when (response.code()) {
